@@ -39,7 +39,7 @@
 --- effect due to increasing the size of the training set:
 
 --- (1) on some datasets error is reduced, i.e., some show a learning curve
---- (2) on most datasets error is reduced, i.e., most show a learning curve
+(2) on most datasets error is reduced, i.e., most show a learning curve
 --- (3) on all datasets error is reduced, i.e., all show a learning curve
 --- (4) error was basically unchanged, i.e., no learning curve
 --- (5) Decision Trees are better than Nearest Neighbour learning algorithms 
@@ -68,7 +68,7 @@
 --- algorithms based on your numbers on mean error reduction
 --- relative to default on only 10% of the data I observe that:
 
---- (1) 10% of the data is not enough for learning a good model
+(1) 10% of the data is not enough for learning a good model
 --- (2) only the Decision Tree learner reduces error with 10% of the data
 --- (3) only the Nearest Neighbour learner reduces error with 10% of the data
 --- (4) both algorithms learn models that reduce error by more than 20% with 10% of the data
@@ -81,7 +81,7 @@
 --- (1) Decision Trees cannot reduce error enough
 --- (2) Nearest Neighbour cannot reduce error enough
 --- (3) Nearest Neighbour may be overfitting some of the datasets 
---- (4) Decision Trees may be overfitting some of the datasets
+(4) Decision Trees may be overfitting some of the datasets
 --- (5) Deep Learning will definitely do better with less data
 
 --------------------------------------------------------------
@@ -100,7 +100,7 @@
 
 --- (1) generate the vocabulary and count the frequency of words independently for the training and test sets
 --- (2) generate the vocabulary and count the frequency of words overall for the combined training and test sets
---- (3) generate the vocabulary overall for the combined training and test sets, and count the frequency of words independently for the training and test sets
+(3) generate the vocabulary overall for the combined training and test sets, and count the frequency of words independently for the training and test sets
 --- (4) generate the vocabulary independently for the training and test sets, and count the frequency of words overall for the combined training and test sets
 
 *** Part 2:
@@ -115,7 +115,7 @@
 --- snippet classification dataset:
 
 --- (1) Multinomial Naive Bayes is rarely used for text classification
---- (2) the class-conditional probabilities for most of the words are relevant to classification 
+(2) the class-conditional probabilities for most of the words are relevant to classification 
 --- (3) text classification is not possible using just the class-conditional probabilities of the words
 --- (4) the prior probabilities of the class labels will dominate the the class-conditional probabilities of the words
 
