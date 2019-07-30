@@ -10,6 +10,8 @@ from utils.score import report_score, LABELS, score_submission
 
 from utils.system import parse_params, check_version
 
+# Sourced from https://github.com/FakeNewsChallenge/fnc-1-baseline
+
 
 def generate_features(stances,dataset,name):
     h, b, y = [],[],[]
