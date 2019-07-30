@@ -146,6 +146,7 @@ if __name__ == '__main__':
     model = DecisionTreeClassifier()
     model.fit(train_X, train_Y)
     train_score = model.score(train_X, train_Y)
+    print(train_score)
 
 
 
