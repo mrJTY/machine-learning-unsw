@@ -5,6 +5,7 @@ import numpy as np
 from sklearn import feature_extraction
 from tqdm import tqdm
 
+# Sourced from: https://github.com/FakeNewsChallenge/fnc-1-baseline
 
 _wnl = nltk.WordNetLemmatizer()
 
@@ -58,7 +59,7 @@ def refuting_features(headlines, bodies):
         'hoax',
         'false',
         'deny', 'denies',
-        # 'refute',
+        'refute',
         'not',
         'despite',
         'nope',
@@ -73,6 +74,8 @@ def refuting_features(headlines, bodies):
         clean_headline = clean(headline)
         clean_headline = get_tokenized_lemmas(clean_headline)
         features = [1 if word in clean_headline else 0 for word in _refuting_words]
+        # Return a count of refuting words
+        features = sum(features)
         X.append(features)
     return X
 
