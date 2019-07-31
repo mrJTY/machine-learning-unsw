@@ -143,7 +143,7 @@ def preprocess_data(datasources, train_key = 'train', test_key = 'test'):
 
     # Create the X features and Y labels
     train_X = sp.hstack((train_refutes, train_words))
-    train_Y = train['Stance'].apply(lambda key: config.LABELS[key])
+    train_Y = train['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     # Create the X features and Y labels
     test_X = sp.hstack((test_refutes, test_words))
