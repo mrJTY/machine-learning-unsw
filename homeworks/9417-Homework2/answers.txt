@@ -85,11 +85,11 @@ heart-h         |  35.96% ( 2)     |  67.42% ( 7)     |  78.65% (22)     |  56.1
 --- any changes from your final code as it ran in the notebook !!!
 
 --- setup for the current step  [2 marks]
-layer_input =  []
+layer_input =  outputs.pop()
 weight = []
 
 --- calculate gradients  [1 mark]
-gradients, dW, db = [], [], []
+gradients, dW, db = self.derivatives_of_last_layer(y - prediction, prediction, layer_input)
 
 --- update weights  [2 marks]
 self.weights[0] += 0
