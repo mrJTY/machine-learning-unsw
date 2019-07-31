@@ -1,4 +1,6 @@
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+
 
 LABELS = {
     'agree': 0,

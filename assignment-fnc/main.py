@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     train_X, train_Y, test_X, test_Y = pe.load_pickles()
 
-    mo.create_and_score_model('tree', train_X, train_Y, test_X, test_Y)
+    mo.create_and_score_model('gradient_boost', train_X, train_Y, test_X, test_Y)
 
 #    model.fit(train_X, train_Y)
 #    train_score = model.score(train_X, train_Y)
