@@ -1,5 +1,0 @@
-train:
-  file: fnc-1/train_bodies.csv
-test:
-  file: fnc-1/competition_test_bodies.csv
-
