@@ -2,12 +2,14 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 
 
-LABELS = {
+LABEL_LOOKUP = {
     'agree': 0,
     'disagree': 1,
     'discuss': 2,
     'unrelated': 3
 }
+
+LABELS = ['agree', 'disagree', 'discuss', 'unrelated']
 
 DATASOURCES = {
     "train": {
