@@ -1,7 +1,3 @@
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-
-
 LABEL_LOOKUP = {
     'agree': 0,
     'disagree': 1,
@@ -22,7 +18,3 @@ DATASOURCES = {
     }
 }
 
-MODELS = {
-    'tree': DecisionTreeClassifier(),
-    'gradient_boost': GradientBoostingClassifier()
-}
