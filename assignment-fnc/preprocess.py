@@ -71,6 +71,19 @@ def count_overlaps(train_df, test_df):
     print("")
     return train_X, test_X
 
+def count_polarity(train_df, test_df):
+    """
+    Count the number of times
+    Assumes that df already has headline and article body
+    """
+    print("Counting the number of polarity...")
+    train_X = fe.word_overlap_features(train_df['Headline'], train_df['articleBody'])
+    test_X = fe.word_overlap_features(test_df['Headline'], test_df['articleBody'])
+    print(f"Train refutes shape {train_X.shape}")
+    print(f"Test refutes shape {test_X.shape}")
+    print("")
+    return train_X, test_X
+
 
 def tfvectorizer(train, test):
     """
@@ -139,17 +152,18 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     # Count overlap
     train_overlaps, test_overlaps = count_overlaps(train, test)
 
-    # TODO(JT): Add polarity
+    # Count overlap
+    train_polarity, test_polarity = count_polarity(train, test)
 
     # TODO(JT): Add hand
 
     # Create the X features and Y labels
     #pdb.set_trace()
-    train_X = sp.hstack((train_words, train_refutes, train_overlaps))
+    train_X = sp.hstack((train_words, train_refutes, train_overlaps, train_polarity))
     train_Y = train['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     # Create the X features and Y labels
-    test_X = sp.hstack((test_words, test_refutes,test_overlaps))
+    test_X = sp.hstack((test_words, test_refutes,test_overlaps, test_polarity))
     test_Y = test['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     write_to_pickle(train_X, train_Y, test_X, test_Y)
