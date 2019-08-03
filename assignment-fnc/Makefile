@@ -3,7 +3,9 @@ install:
 	pip install -r requirements.txt
 
 zip:
-	zip
+	rm -f files.zip && \
+	zip -r files.zip logs sbin *.py *.txt fnc_challenge_utils data/placeholder Makefile --exclude *.pyc
 
 submit:
+	give cs9417 assignment files.zip report.pdf
 
