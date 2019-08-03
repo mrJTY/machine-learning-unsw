@@ -9,6 +9,7 @@ def parse_args():
     parser.add_argument("--process_data", help="If flag is true, then it will process and vectorize words from the train and test sets. Otherwise, it will load .pickle files", action="store_true")
     parser.add_argument("--model", help="Model name", required=True)
     parser.add_argument("--train_prop", help="The proportion of training dataset to read from. Between 0 and 1", default=1)
+    parser.add_argument("--test_prop", help="The proportion of training dataset to read from. Between 0 and 1", default=1)
     args = parser.parse_args()
     return args
 
@@ -18,9 +19,10 @@ if __name__ == '__main__':
     print(args)
 
     train_prop = float(args.train_prop)
+    test_prop = float(args.test_prop)
 
     if args.process_data:
-         pe.preprocess_data(datasources=config.DATASOURCES, train_prop=train_prop)
+         pe.preprocess_data(datasources=config.DATASOURCES, train_prop=train_prop, test_prop=test_prop)
 
     train_X, train_Y, test_X, test_Y = pe.load_pickles()
 

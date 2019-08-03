@@ -54,7 +54,7 @@ def word_overlap_features(headlines, bodies):
     # I'm just going to return an average overlap rate
     X = [np.mean(i) for i in X]
 
-    return np.array(X)
+    return np.array(X)[np.newaxis].T
 
 
 
@@ -83,7 +83,8 @@ def refuting_features(headlines, bodies):
         # Return a count of refuting words
         features = sum(features)
         X.append(features)
-    return np.array(X)
+    # Return a column vector
+    return np.array(X)[np.newaxis].T
 
 
 def polarity_features(headlines, bodies):

@@ -34,13 +34,13 @@ def clean_bodies(df):
     return df
 
 
-def merge_stance_and_body(stance_df, body_df, train_prop=1):
+def merge_stance_and_body(stance_df, body_df, prop=1):
     merged = pd.merge(left=stance_df, right=body_df, left_on="Body ID", right_on="Body ID")
     # Sample from training dataset if train_prop is given
-    if train_prop < 1:
+    if prop < 1:
         n_total = merged.shape[0]
-        n_samples = int(n_total * train_prop)
-        print(f"Sampling the training dataset with only {n_samples} samples")
+        n_samples = int(n_total * prop)
+        print(f"Sampling the dataset with only {n_samples} samples")
         merged = merged.sample(n=n_samples, random_state=123)
 
     return merged
@@ -83,53 +83,16 @@ def tfvectorizer(train, test):
     tfidf.fit(corpus)
     return tfidf
 
-def create_tfidf_matrix():
+def create_tfidf_matrix(train, test):
     # Create a vectorizer from both the train and test sets
-    # print("Fitting a tfidf vectorizer..")
-    # tfidf = tfvectorizer(train, test)
-    # train_words = tfidf.transform(train['articleBody'])
-    # test_words = tfidf.transform(test['articleBody'])
-    # print(f"Tfidf vectorized train_words shape: {train_words.shape}")
-    # print(f"Tfidf vectorized test_words shape: {test_words.shape}")
-    # print("")
-    pass
-
-
-def preprocess_data(datasources, train_key='train', test_key='test', train_prop=1):
-    """
-    Read from input data and save as matrix pickles
-    """
-
-    print("Reading data..")
-    train_bodies, train_stances, test_bodies, test_stances = read_comp_data(datasources, train_key, test_key)
-    train = merge_stance_and_body(train_stances, train_bodies, train_prop)
-    test = merge_stance_and_body(test_stances, test_bodies)
-    print(f"Train shape : {train.shape}")
-    print(f"Test shape : {test.shape}")
+    print("Fitting a tfidf vectorizer..")
+    tfidf = tfvectorizer(train, test)
+    train_words = tfidf.transform(train['articleBody'])
+    test_words = tfidf.transform(test['articleBody'])
+    print(f"Tfidf vectorized train_words shape: {train_words.shape}")
+    print(f"Tfidf vectorized test_words shape: {test_words.shape}")
     print("")
-
-
-    # Count refutes
-    train_refutes, test_refutes = count_refutes(train, test)
-
-    # Count overlap
-    train_overlaps, test_overlaps = count_overlaps(train, test)
-    pdb.set_trace()
-    # TODO(JT): Add polarity
-
-    # TODO(JT): Add hand
-
-    # Create the X features and Y labels
-    train_X = sp.hstack((train_refutes, train_overlaps))
-    train_Y = train['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
-
-    # Create the X features and Y labels
-    test_X = sp.hstack((test_refutes, test_words))
-    test_Y = test['Stance'].apply(lambda key: config.LABELS[key])
-
-    write_to_pickle(train_X, train_Y, test_X, test_Y)
-
-
+    return train_words, test_words
 
 def write_to_pickle(train_X, train_Y, test_X, test_Y):
     """
@@ -148,4 +111,45 @@ def load_pickles():
             pickle.load(open("data/train_Y.pickle", "rb")),
             pickle.load(open("data/test_X.pickle", "rb")),
             pickle.load(open("data/test_Y.pickle", "rb")))
+
+
+
+def preprocess_data(datasources, train_key='train', test_key='test', train_prop=1, test_prop=1):
+    """
+    Read from input data and save as matrix pickles
+    """
+
+    print("Reading data..")
+    train_bodies, train_stances, test_bodies, test_stances = read_comp_data(datasources, train_key, test_key)
+    train = merge_stance_and_body(train_stances, train_bodies, train_prop)
+    test = merge_stance_and_body(test_stances, test_bodies, test_prop)
+    print(f"Train shape : {train.shape}")
+    print(f"Test shape : {test.shape}")
+    print("")
+
+    # TfIDF Vectorize
+    train_words, test_words = create_tfidf_matrix(train, test)
+
+    # Count refutes
+    train_refutes, test_refutes = count_refutes(train, test)
+
+    # Count overlap
+    train_overlaps, test_overlaps = count_overlaps(train, test)
+
+    # TODO(JT): Add polarity
+
+    # TODO(JT): Add hand
+
+    # Create the X features and Y labels
+    pdb.set_trace()
+    train_X = sp.hstack((train_words, train_refutes, train_overlaps))
+    train_Y = train['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
+
+    # Create the X features and Y labels
+    test_X = sp.hstack((test_words, test_refutes,test_overlaps))
+    test_Y = test['Stance'].apply(lambda key: config.LABELS_LOOKUP[key])
+
+    write_to_pickle(train_X, train_Y, test_X, test_Y)
+
+
 
