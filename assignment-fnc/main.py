@@ -7,6 +7,7 @@ import scoring
 def parse_args():
     parser = argparse.ArgumentParser();
     parser.add_argument("--process_data", help="If flag is true, then it will process and vectorize words from the train and test sets. Otherwise, it will load .pickle files", action="store_true")
+    parser.add_argument("--model", help="Model name", required=True)
     args = parser.parse_args()
     return args
 
