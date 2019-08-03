@@ -141,13 +141,13 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     # TODO(JT): Add hand
 
     # Create the X features and Y labels
-    pdb.set_trace()
+    #pdb.set_trace()
     train_X = sp.hstack((train_words, train_refutes, train_overlaps))
     train_Y = train['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     # Create the X features and Y labels
     test_X = sp.hstack((test_words, test_refutes,test_overlaps))
-    test_Y = test['Stance'].apply(lambda key: config.LABELS_LOOKUP[key])
+    test_Y = test['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     write_to_pickle(train_X, train_Y, test_X, test_Y)
 

@@ -2,7 +2,7 @@ import preprocess as pe
 import modelling as mo
 import config
 import argparse
-import fnc_challenge_utils.scoring
+import fnc_challenge_utils.scoring as scoring
 
 def parse_args():
     parser = argparse.ArgumentParser();
