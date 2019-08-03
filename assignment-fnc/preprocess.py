@@ -7,67 +7,11 @@ import re
 import nltk
 import numpy as np
 import config
+import fnc_challenge_utils.feature_engineering as fe
 import pdb
 
-# Sourced from: https://github.com/FakeNewsChallenge/fnc-1-baseline
-_wnl = nltk.WordNetLemmatizer()
 
-def normalize_word(w):
-    """
-    Lower case a word
-    """
-    return _wnl.lemmatize(w).lower()
-
-def get_tokenized_lemmas(s):
-    return [normalize_word(t) for t in nltk.word_tokenize(s)]
-
-def clean(s):
-    # Cleans a string: Lowercasing, trimming, removing non-alphanumeric
-
-    return " ".join(re.findall(r'\w+', s, flags=re.UNICODE)).lower()
-
-def refuting_features(headlines, bodies):
-    """
-    Sourced from FNC utilities function
-    Returns a pd.Series of the count of refuting words
-    """
-    refuting_words = [
-        'fake',
-        'fraud',
-        'hoax',
-        'false',
-        'deny',
-        'denies',
-        'refute',
-        'not',
-        'despite',
-        'nope',
-        'doubt',
-        'doubts',
-        'bogus',
-        'debunk',
-        'pranks',
-        'retract'
-    ]
-    X = []
-    for i, (headline, body) in enumerate(zip(headlines, bodies)):
-        clean_headline = clean(headline)
-        clean_headline = get_tokenized_lemmas(clean_headline)
-        features = [1 if word in clean_headline else 0 for word in refuting_words]
-        # Return a count of refuting words
-        features = sum(features)
-        X.append(features)
-    X = np.array([X]).T
-    return X
-
-def remove_stopwords(l):
-    """
-    Sourced from FNC utilities function
-    Removes stopwords from a list of tokens
-    """
-    return [w for w in l if w not in feature_extraction.text.ENGLISH_STOP_WORDS]
-
-def read_comp_data(datasources, train_key = 'train', test_key = 'test'):
+def read_comp_data(datasources, train_size, train_key = 'train', test_key = 'test'):
     """
     Read the raw competition data
     """
@@ -90,15 +34,43 @@ def clean_bodies(df):
     return df
 
 
-def merge_stance_and_body(stance_df, body_df):
-    return pd.merge(left=stance_df, right=body_df, left_on="Body ID", right_on="Body ID")
+def merge_stance_and_body(stance_df, body_df, train_prop=1):
+    merged = pd.merge(left=stance_df, right=body_df, left_on="Body ID", right_on="Body ID")
+    # Sample from training dataset if train_prop is given
+    if train_prop < 1:
+        n_total = merged.shape[0]
+        n_samples = int(n_total * train_prop)
+        print(f"Sampling the training dataset with only {n_samples} samples")
+        merged = merged.sample(n=n_samples, random_state=123)
 
-def count_refutes(df):
+    return merged
+
+def count_refutes(train_df, test_df):
     """
+    Count the number of times a refusal word was seen in the headline
     Assumes that df already has headline and article body
     """
-    count_refutes = refuting_features(df['Headline'], df['articleBody'])
-    return count_refutes
+    print("Counting the number of refutes...")
+    train_X = fe.refuting_features(train_df['Headline'], train_df['articleBody'])
+    test_X = fe.refuting_features(test_df['Headline'], test_df['articleBody'])
+    print(f"Train refutes shape {train_X.shape}")
+    print(f"Test refutes shape {test_X.shape}")
+    print("")
+    return train_X, test_X
+
+def count_overlaps(train_df, test_df):
+    """
+    Count the number of times
+    Assumes that df already has headline and article body
+    """
+    print("Counting the number of overlaps...")
+    train_X = fe.word_overlap_features(train_df['Headline'], train_df['articleBody'])
+    test_X = fe.word_overlap_features(test_df['Headline'], test_df['articleBody'])
+    print(f"Train refutes shape {train_X.shape}")
+    print(f"Test refutes shape {test_X.shape}")
+    print("")
+    return train_X, test_X
+
 
 def tfvectorizer(train, test):
     """
@@ -111,38 +83,44 @@ def tfvectorizer(train, test):
     tfidf.fit(corpus)
     return tfidf
 
-def preprocess_data(datasources, train_key = 'train', test_key = 'test'):
+def create_tfidf_matrix():
+    # Create a vectorizer from both the train and test sets
+    # print("Fitting a tfidf vectorizer..")
+    # tfidf = tfvectorizer(train, test)
+    # train_words = tfidf.transform(train['articleBody'])
+    # test_words = tfidf.transform(test['articleBody'])
+    # print(f"Tfidf vectorized train_words shape: {train_words.shape}")
+    # print(f"Tfidf vectorized test_words shape: {test_words.shape}")
+    # print("")
+    pass
+
+
+def preprocess_data(datasources, train_key='train', test_key='test', train_prop=1):
     """
     Read from input data and save as matrix pickles
     """
 
     print("Reading data..")
     train_bodies, train_stances, test_bodies, test_stances = read_comp_data(datasources, train_key, test_key)
-    train = merge_stance_and_body(train_stances, train_bodies)
+    train = merge_stance_and_body(train_stances, train_bodies, train_prop)
     test = merge_stance_and_body(test_stances, test_bodies)
     print(f"Train shape : {train.shape}")
     print(f"Test shape : {test.shape}")
     print("")
 
-    # Create a vectorizer from both the train and test sets
-    print("Fitting a tfidf vectorizer..")
-    tfidf = tfvectorizer(train, test)
-    train_words = tfidf.transform(train['articleBody'])
-    test_words = tfidf.transform(test['articleBody'])
-    print(f"Tfidf vectorized train_words shape: {train_words.shape}")
-    print(f"Tfidf vectorized test_words shape: {test_words.shape}")
-    print("")
 
     # Count refutes
-    print("Counting the number of refutes...")
-    train_refutes = count_refutes(train)
-    test_refutes = count_refutes(test)
-    print(f"Train refutes shape {train_refutes.shape}")
-    print(f"Test refutes shape {test_refutes.shape}")
-    print("")
+    train_refutes, test_refutes = count_refutes(train, test)
+
+    # Count overlap
+    train_overlaps, test_overlaps = count_overlaps(train, test)
+    pdb.set_trace()
+    # TODO(JT): Add polarity
+
+    # TODO(JT): Add hand
 
     # Create the X features and Y labels
-    train_X = sp.hstack((train_refutes, train_words))
+    train_X = sp.hstack((train_refutes, train_overlaps))
     train_Y = train['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     # Create the X features and Y labels

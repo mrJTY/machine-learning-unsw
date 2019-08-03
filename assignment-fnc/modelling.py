@@ -1,12 +1,16 @@
 from keras.layers import Dense
+from keras.models import Sequential
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 
-def nnet_keras(train_X, train_Y):
+def nnet_keras(train_X, train_Y, num_dimensions=29265):
     model = Sequential()
-    model.add(Dense(units=64, activation='relu', input_dim=100))
-    model.add(Dense(units=10, activation='softmax'))
-    model.fit(train_X, train_Y, epochs=5, batch_size=32)
+    model.add(Dense(units=64, activation='relu', input_dim=num_dimensions))
+    model.add(Dense(units=1, activation='softmax'))
+    model.compile(loss='sparse_categorical_crossentropy',
+              optimizer='sgd',
+              metrics=['accuracy'])
+    model.fit(train_X, train_Y)
     return model
 
 def decision_tree(train_X, train_Y):

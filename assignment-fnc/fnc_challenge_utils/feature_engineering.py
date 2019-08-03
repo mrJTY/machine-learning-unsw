@@ -4,6 +4,7 @@ import nltk
 import numpy as np
 from sklearn import feature_extraction
 from tqdm import tqdm
+import pdb
 
 # Sourced from: https://github.com/FakeNewsChallenge/fnc-1-baseline
 
@@ -49,7 +50,12 @@ def word_overlap_features(headlines, bodies):
         features = [
             len(set(clean_headline).intersection(clean_body)) / float(len(set(clean_headline).union(clean_body)))]
         X.append(features)
-    return X
+
+    # I'm just going to return an average overlap rate
+    X = [np.mean(i) for i in X]
+
+    return np.array(X)
+
 
 
 def refuting_features(headlines, bodies):
@@ -77,7 +83,7 @@ def refuting_features(headlines, bodies):
         # Return a count of refuting words
         features = sum(features)
         X.append(features)
-    return X
+    return np.array(X)
 
 
 def polarity_features(headlines, bodies):
