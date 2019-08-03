@@ -114,8 +114,12 @@ def polarity_features(headlines, bodies):
         features = []
         features.append(calculate_polarity(clean_headline))
         features.append(calculate_polarity(clean_body))
+
+        # Avg the polarity
+        features = np.mean(features)
         X.append(features)
-    return np.array(X)
+    # Return a column vector
+    return np.array(X)[np.newaxis].T
 
 
 def ngrams(input, n):

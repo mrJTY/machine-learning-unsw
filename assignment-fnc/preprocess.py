@@ -11,14 +11,14 @@ import fnc_challenge_utils.feature_engineering as fe
 import pdb
 
 
-def read_comp_data(datasources, train_size, train_key = 'train', test_key = 'test'):
+def read_comp_data(datasources):
     """
     Read the raw competition data
     """
-    train_bodies = pd.read_csv(datasources[train_key]['bodies'])
-    train_stances = pd.read_csv(datasources[train_key]['stances'])
-    test_bodies = pd.read_csv(datasources[test_key]['bodies'])
-    test_stances = pd.read_csv(datasources[test_key]['stances'])
+    train_bodies = pd.read_csv(datasources['train']['bodies'])
+    train_stances = pd.read_csv(datasources['train']['stances'])
+    test_bodies = pd.read_csv(datasources['test']['bodies'])
+    test_stances = pd.read_csv(datasources['test']['stances'])
 
     return (train_bodies, train_stances, test_bodies, test_stances)
 
@@ -120,7 +120,10 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     """
 
     print("Reading data..")
-    train_bodies, train_stances, test_bodies, test_stances = read_comp_data(datasources, train_key, test_key)
+    train_bodies, train_stances, test_bodies, test_stances = read_comp_data(datasources)
+    print("Original data sizes")
+    print(f"{len(train_bodies)}")
+    print("")
     train = merge_stance_and_body(train_stances, train_bodies, train_prop)
     test = merge_stance_and_body(test_stances, test_bodies, test_prop)
     print(f"Train shape : {train.shape}")
