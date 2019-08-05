@@ -27,8 +27,13 @@ if __name__ == '__main__':
          pe.preprocess_data(datasources=config.DATASOURCES, train_prop=train_prop, test_prop=test_prop)
 
     train_X, train_Y, test_X, test_Y = pe.load_pickles()
+    train_nrows = train_X.shape[0]
 
-    clf = mo.train_model(args.model, train_X, train_Y, test_X, test_Y)
+
+    if model == 'nnet':
+        
+    else:
+        clf = mo.train_sklearn_model(args.model, train_X, train_Y, test_X, test_Y)
 
     predicted = [config.LABELS[int(a)] for a in clf.predict(test_X)]
     actual = [config.LABELS[int(a)] for a in test_Y]

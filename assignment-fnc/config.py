@@ -17,4 +17,3 @@ DATASOURCES = {
         "stances": "data/competition_test_stances.csv"
     }
 }
-
