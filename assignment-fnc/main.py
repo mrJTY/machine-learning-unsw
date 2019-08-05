@@ -28,13 +28,19 @@ if __name__ == '__main__':
 
     train_X, train_Y, test_X, test_Y = pe.load_pickles()
     train_nrows = train_X.shape[0]
+    train_ncols = train_X.shape[1]
 
 
-    if model == 'nnet':
-        
+    if args.model == 'nnet':
+        train_X = train_X.toarray()
+        train_Y = train_Y.values
+        test_X = test_X.toarray()
+        test_Y = test_Y.values
+        clf = mo.nnet_keras(train_X, train_Y, input_dim=train_ncols)
     else:
         clf = mo.train_sklearn_model(args.model, train_X, train_Y, test_X, test_Y)
 
+    # TODO: adjust predict for nnet
     predicted = [config.LABELS[int(a)] for a in clf.predict(test_X)]
     actual = [config.LABELS[int(a)] for a in test_Y]
     score = scoring.report_score(actual, predicted)
