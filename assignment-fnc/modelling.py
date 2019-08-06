@@ -11,6 +11,22 @@ import fnc_challenge_utils.scoring as scoring
 from sklearn.ensemble import AdaBoostClassifier
 import time
 
+import lightgbm as lgb
+
+def lightgbm_model(train_X, train_Y, test_X, test_Y):
+    param = {'num_leaves': 31, 'objective': 'binary'}
+    param['metric'] = 'auc'
+    num_round = 10
+    train_data = lgb.Dataset(train_X, label=train_Y)
+    best_model = lgb.train(param, train_data, num_round)
+
+    lgb.cv(param, train_data, num_round, nfold=5)
+
+    pred_Y = best_model.predict(test_X)
+    import pdb
+    pdb.set_trace()
+
+
 def adaboost():
     return AdaBoostClassifier(random_state=123)
 

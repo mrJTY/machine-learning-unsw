@@ -28,11 +28,11 @@ if __name__ == '__main__':
          pe.preprocess_data(datasources=config.DATASOURCES, train_prop=train_prop, test_prop=test_prop)
 
     train_X, train_Y, test_X, test_Y = pe.load_pickles()
-    train_nrows = train_X.shape[0]
-    train_ncols = train_X.shape[1]
-    actual = [config.LABELS[int(a)] for a in test_Y]
 
 
-    mo.train_sklearn_model(args.model, train_X, train_Y, test_X, test_Y)
+    if args.model == 'lightgbm':
+        mo.lightgbm_model(train_X, train_Y, test_X, test_Y)
+    else:
+        mo.train_sklearn_model(args.model, train_X, train_Y, test_X, test_Y)
 
 
