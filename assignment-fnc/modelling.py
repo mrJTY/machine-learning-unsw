@@ -71,8 +71,15 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     test_pred = [config.LABELS[int(a)] for a in model.predict(test_X)]
 
     # Scoring from the FNC challenge
-    score = scoring.report_score(test_Y_labels, test_pred)
+    print("Training score:")
+    train_score = scoring.report_score(train_Y_labels, train_pred)
+    print("")
+    print("Test Score:")
+    test_score = scoring.report_score(test_Y_labels, test_pred)
+    print("")
 
-    print(f"Train score: {accuracy_score(train_Y_labels, train_pred)}")
-    print(f"Test score: {accuracy_score(test_Y_labels, test_pred)}")
+
+    # Diagonal scores, won't be using them
+    #print(f"Train score: {accuracy_score(train_Y_labels, train_pred)}")
+    #print(f"Test score: {accuracy_score(test_Y_labels, test_pred)}")
     return model
