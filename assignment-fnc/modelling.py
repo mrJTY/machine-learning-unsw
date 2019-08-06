@@ -5,25 +5,27 @@ import numpy as np
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.naive_bayes import MultinomialNB
+import config
+from sklearn.metrics import accuracy_score
+import fnc_challenge_utils.scoring as scoring
 
 
-def nnet(train_X, train_Y, test_X, test_Y):
-    model = MLPClassifier(solver='adam', hidden_layer_sizes=(3, 3), random_state=123,
+def nb():
+    return MultinomialNB()
+
+def nnet():
+    return MLPClassifier(solver='adam', hidden_layer_sizes=(3, 3), random_state=123,
                           alpha=0.005, verbose=False
     )
-    model.fit(train_X, train_Y)
-    return model
 
-def simple_decision_tree(train_X, train_Y):
+def simple_decision_tree():
     """
     Simple tree with default parameters
     Expect to have the lowest score
     """
-    model = DecisionTreeClassifier()
-    model.fit(train_X, train_Y)
-    return model
+    return DecisionTreeClassifier()
 
-def random_cv_tree(train_X, train_Y):
+def random_cv_tree():
     """
     Use a randomised cross validation search to find the
     best parameters for a Decision Tree
@@ -36,34 +38,41 @@ def random_cv_tree(train_X, train_Y):
         'min_samples_split': [3, 5, 10],
         'max_features': ["sqrt"]
     }
-    model = RandomizedSearchCV(clf, n_iter=n_iter_search, cv=3, iid=False, param_distributions=param_distributions)
-    model.fit(train_X, train_Y)
-    return model
+    return RandomizedSearchCV(clf, n_iter=n_iter_search, cv=3, iid=False, param_distributions=param_distributions)
 
-def gbm(train_X, train_Y):
+def gbm():
     """
     Gradient boosting model
     This was the baseline of the FNC challenge
     """
-
-    model = GradientBoostingClassifier()
-    model.fit(train_X, train_Y)
-    return model
+    return GradientBoostingClassifier()
 
 
 MODELS = {
     'simple_tree': simple_decision_tree,
     'random_tree': random_cv_tree,
     'gbm': gbm,
-    'nnet': nnet
+    'nnet': nnet,
+    'nb': nb
 }
 
 def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     print(f"Training a {model_name} model")
-    model = MODELS[model_name](train_X, train_Y, test_X, test_Y)
-
+    model = MODELS[model_name]()
+    model.fit(train_X, train_Y)
     print(f"Trained a model using {model}")
-    print(f"These are the predictions: ")
-    predicted = [config.LABELS[int(np.argmax(a))] for a in model.predict(test_X)]
-    score = scoring.report_score(actual, predicted)
+
+    # Actual labels
+    train_Y_labels = [config.LABELS[int(a)] for a in train_Y]
+    test_Y_labels = [config.LABELS[int(a)] for a in test_Y]
+
+    # Prediction labels
+    train_pred = [config.LABELS[int(a)] for a in model.predict(train_X)]
+    test_pred = [config.LABELS[int(a)] for a in model.predict(test_X)]
+
+    # Scoring from the FNC challenge
+    score = scoring.report_score(test_Y_labels, test_pred)
+
+    print(f"Train score: {accuracy_score(train_Y_labels, train_pred)}")
+    print(f"Test score: {accuracy_score(test_Y_labels, test_pred)}")
     return model
