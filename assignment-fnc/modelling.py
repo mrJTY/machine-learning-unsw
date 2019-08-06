@@ -1,22 +1,16 @@
-from keras.layers import Dense
-from keras.models import Sequential
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import RandomizedSearchCV
 import numpy as np
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
 
-
-def nnet_keras(train_X, train_Y, input_dim):
-    model = Sequential()
-    model.add(Dense(units=64, activation='relu', input_dim=input_dim))
-    model.add(Dense(units=64, activation='relu'))
-    model.add(Dense(units=4, activation='softmax'))
-    model.compile(loss='sparse_categorical_crossentropy',
-              optimizer='sgd',
-              metrics=['accuracy'])
+def nnet(train_X, train_Y, test_X, test_Y):
+    model = MLPClassifier(solver='adam', hidden_layer_sizes=(3, 3), random_state=123,
+                          alpha=0.005, verbose=False
+    )
     model.fit(train_X, train_Y)
     return model
-
 
 def simple_decision_tree(train_X, train_Y):
     """
@@ -58,12 +52,24 @@ def gbm(train_X, train_Y):
 MODELS = {
     'simple_tree': simple_decision_tree,
     'random_tree': random_cv_tree,
-    'gbm': gbm
+    'gbm': gbm,
+    'nnet': nnet
 }
 
-def train_model(model_name, train_X, train_Y, test_X, test_Y):
+def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
+    train_X = train_X.toarray()
+    test_X = test_X.toarray()
+    scaler = StandardScaler()
+    scaler.fit(train_X)
+
+    train_X = scaler.transform(train_X)
+    test_X = scaler.transform(test_X)
+
     print(f"Training a {model_name} model")
-    model = MODELS[model_name](train_X, train_Y)
+    model = MODELS[model_name](train_X, train_Y, test_X, test_Y)
 
     print(f"Trained a model using {model}")
+    print(f"These are the predictions: ")
+    predicted = [config.LABELS[int(np.argmax(a))] for a in model.predict(test_X)]
+    score = scoring.report_score(actual, predicted)
     return model
