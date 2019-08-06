@@ -4,6 +4,8 @@ from sklearn.model_selection import RandomizedSearchCV
 import numpy as np
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
+from sklearn.naive_bayes import MultinomialNB
+
 
 def nnet(train_X, train_Y, test_X, test_Y):
     model = MLPClassifier(solver='adam', hidden_layer_sizes=(3, 3), random_state=123,
@@ -57,14 +59,6 @@ MODELS = {
 }
 
 def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
-    train_X = train_X.toarray()
-    test_X = test_X.toarray()
-    scaler = StandardScaler()
-    scaler.fit(train_X)
-
-    train_X = scaler.transform(train_X)
-    test_X = scaler.transform(test_X)
-
     print(f"Training a {model_name} model")
     model = MODELS[model_name](train_X, train_Y, test_X, test_Y)
 
