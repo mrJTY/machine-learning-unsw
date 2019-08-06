@@ -8,7 +8,11 @@ from sklearn.naive_bayes import MultinomialNB
 import config
 from sklearn.metrics import accuracy_score
 import fnc_challenge_utils.scoring as scoring
+from sklearn.ensemble import AdaBoostClassifier
+import time
 
+def adaboost():
+    return AdaBoostClassifier(random_state=123)
 
 def nb():
     return MultinomialNB()
@@ -53,13 +57,19 @@ MODELS = {
     'random_tree': random_cv_tree,
     'gbm': gbm,
     'nnet': nnet,
-    'nb': nb
+    'nb': nb,
+    'adaboost': adaboost
 }
 
 def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
+    start_time = time.time()
+    print("")
     print(f"Training a {model_name} model")
+    print("")
     model = MODELS[model_name]()
     model.fit(train_X, train_Y)
+    print(f"Training time took {time.time() - start_time} seconds")
+    print("")
     print(f"Trained a model using {model}")
 
     # Actual labels
@@ -76,10 +86,5 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     print("")
     print("Test Score:")
     test_score = scoring.report_score(test_Y_labels, test_pred)
-    print("")
 
-
-    # Diagonal scores, won't be using them
-    #print(f"Train score: {accuracy_score(train_Y_labels, train_pred)}")
-    #print(f"Test score: {accuracy_score(test_Y_labels, test_pred)}")
     return model
