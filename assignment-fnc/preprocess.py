@@ -8,6 +8,7 @@ import nltk
 import numpy as np
 import config
 import fnc_challenge_utils.feature_engineering as fe
+from sklearn.decomposition import TruncatedSVD
 import pdb
 
 
@@ -120,6 +121,12 @@ def create_tfidf_matrix(train, test):
     print("")
     return train_words, test_words
 
+def reduce_dimensions(input_matrix):
+    svd = TruncatedSVD(n_components=500, n_iter=7, random_state=123)
+    output = svd.fit_transform(input_matrix)
+    explained_variance = svd.explained_variance_ratio_.sum()
+    return output, explained_variance
+
 def write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop):
     """
     Dump to a pickle for faster load
@@ -160,6 +167,10 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
 
     # TfIDF Vectorize
     train_words, test_words = create_tfidf_matrix(train, test)
+    train_bag_of_words, explained_var_train = reduce_dimensions(train_words)
+    print("Explained variance of SVD on train features: {}%".format(int(explained_var_train * 100)))
+    test_bag_of_words, explained_var_test = reduce_dimensions(test_words)
+    print("Explained variance of SVD on test features: {}%".format(int(explained_var_test * 100)))
 
     # Count refutes
     train_refutes, test_refutes = count_refutes(train, test)
@@ -174,11 +185,11 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     train_hand, test_hand = count_hand(train, test)
 
     # Create the X features and Y labels
-    train_X = sp.hstack((train_words, train_refutes, train_overlaps, train_polarity, train_hand))
+    train_X = np.hstack([train_bag_of_words, train_refutes, train_overlaps, train_polarity, train_hand])
     train_Y = train['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     # Create the X features and Y labels
-    test_X = sp.hstack((test_words, test_refutes,test_overlaps, test_polarity, test_hand))
+    test_X = np.hstack([test_bag_of_words, test_refutes, test_overlaps, test_polarity, test_hand])
     test_Y = test['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop)
