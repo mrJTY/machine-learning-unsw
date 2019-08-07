@@ -19,19 +19,18 @@ if __name__ == '__main__':
     print(args)
 
     train_prop = float(args.train_prop)
-    test_prop = float(args.test_prop)
 
     if args.skip_preprocess:
         pass
     else:
          # Run the preprocessing and dump as pickles
-         pe.preprocess_data(datasources=config.DATASOURCES, train_prop=train_prop, test_prop=test_prop)
+         pe.preprocess_data(datasources=config.DATASOURCES, train_prop=train_prop)
 
 
     # Train the model
     if args.model != "":
         # Load the pickles
-        train_X, train_Y, test_X, test_Y = pe.load_pickles(train_prop, test_prop)
+        train_X, train_Y, test_X, test_Y = pe.load_pickles(train_prop)
         mo.train_sklearn_model(args.model, train_X, train_Y, test_X, test_Y)
 
 
