@@ -120,27 +120,27 @@ def create_tfidf_matrix(train, test):
     print("")
     return train_words, test_words
 
-def write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop, test_prop):
+def write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop):
     """
     Dump to a pickle for faster load
     """
     pickle.dump(train_X, open(f"data/train_X_{train_prop}.pickle", "wb"))
     pickle.dump(train_Y, open(f"data/train_Y_{train_prop}.pickle", "wb"))
-    pickle.dump(test_X, open(f"data/test_X_{test_prop}.pickle", "wb"))
-    pickle.dump(test_Y, open(f"data/test_Y_{test_prop}.pickle", "wb"))
+    pickle.dump(test_X, open(f"data/test_X_{train_prop}.pickle", "wb"))
+    pickle.dump(test_Y, open(f"data/test_Y_{train_prop}.pickle", "wb"))
 
-def load_pickles(train_prop, test_prop):
+def load_pickles(train_prop):
     """
     Dump to a pickle for faster load
     """
     return (pickle.load(open(f"data/train_X_{train_prop}.pickle", "rb")),
             pickle.load(open(f"data/train_Y_{train_prop}.pickle", "rb")),
-            pickle.load(open(f"data/test_X_{test_prop}.pickle", "rb")),
-            pickle.load(open(f"data/test_Y_{test_prop}.pickle", "rb")))
+            pickle.load(open(f"data/test_X_{train_prop}.pickle", "rb")),
+            pickle.load(open(f"data/test_Y_{train_prop}.pickle", "rb")))
 
 
 
-def preprocess_data(datasources, train_key='train', test_key='test', train_prop=1, test_prop=1):
+def preprocess_data(datasources, train_key='train', test_key='test', train_prop=1):
     """
     Read from input data and save as matrix pickles
     """
@@ -150,8 +150,10 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     print("Original data sizes")
     print(f"{len(train_bodies)}")
     print("")
+    # Training set may be set to different proportions
     train = merge_stance_and_body(train_stances, train_bodies, train_prop)
-    test = merge_stance_and_body(test_stances, test_bodies, test_prop)
+    # Always read 100% of test data
+    test = merge_stance_and_body(test_stances, test_bodies)
     print(f"Train shape : {train.shape}")
     print(f"Test shape : {test.shape}")
     print("")
@@ -179,7 +181,7 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     test_X = sp.hstack((test_words, test_refutes,test_overlaps, test_polarity, test_hand))
     test_Y = test['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
-    write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop, test_prop)
+    write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop)
 
 
 

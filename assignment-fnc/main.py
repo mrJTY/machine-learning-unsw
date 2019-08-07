@@ -10,7 +10,6 @@ def parse_args():
     parser.add_argument("--skip_preprocess", help="If flag is true, it will skip preprocessing the data and load .pickle files in the data/ folder", action="store_true")
     parser.add_argument("--model", help="Model name", default="")
     parser.add_argument("--train_prop", help="The proportion of training dataset to read from. Between 0 and 1", default=1)
-    parser.add_argument("--test_prop", help="The proportion of training dataset to read from. Between 0 and 1", default=1)
     args = parser.parse_args()
     return args
 
