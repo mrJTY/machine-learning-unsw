@@ -15,16 +15,24 @@ def keras_nnet(train_X, train_Y, test_X, test_Y):
     num_classes = 4
     model = Sequential()
     model.add(Dense(units=512, input_dim=train_X.shape[1]))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
     model.add(Dense(units=num_classes, activation='softmax'))
     model.compile(loss='sparse_categorical_crossentropy',
               optimizer='adam',
-              metrics=['accuracy'])
-    model.fit(train_X, train_Y, epochs=3, validation_split=0.1)
+                  metrics=['accuracy'], )
+
+    # Misclassifying agrees and disaggress are more penalty
+    class_weight = {
+        0: 100.,
+        1: 100.,
+        2: 10.,
+        3: 1.
+    }
+    model.fit(train_X, train_Y, epochs=10, class_weight=class_weight)
 
     train_Y_labels = [config.LABELS[int(a)] for a in train_Y]
     test_Y_labels = [config.LABELS[int(a)] for a in test_Y]
-    #train_pred = [config.LABELS[int(a)] for a in model.predict(train_X)]
-    #test_pred = [config.LABELS[int(a)] for a in model.predict(test_X)]
     train_pred = [config.LABELS[int(np.argmax(a))] for a in model.predict(train_X)]
     test_pred = [config.LABELS[int(np.argmax(a))] for a in model.predict(test_X)]
 

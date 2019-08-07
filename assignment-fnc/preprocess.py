@@ -10,7 +10,6 @@ import config
 import fnc_challenge_utils.feature_engineering as fe
 from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import StandardScaler
-import pdb
 
 
 def read_comp_data(datasources):
@@ -103,7 +102,7 @@ def create_tfidf_matrix(train, test):
     return train_words, test_words
 
 def reduce_dimensions(input_matrix):
-    svd = TruncatedSVD(n_components=10, n_iter=7, random_state=123)
+    svd = TruncatedSVD(n_components=100, n_iter=7, random_state=123)
     output = svd.fit_transform(input_matrix)
     explained_variance = svd.explained_variance_ratio_.sum()
     return output, explained_variance

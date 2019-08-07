@@ -6,12 +6,12 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.naive_bayes import MultinomialNB
 import config
-from sklearn.metrics import accuracy_score
 import fnc_challenge_utils.scoring as scoring
 from sklearn.ensemble import AdaBoostClassifier
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, accuracy_score
 import time
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 
 def rf():
     return RandomForestClassifier(random_state=123, n_estimators=200)
@@ -21,6 +21,10 @@ def adaboost():
 
 def nb():
     return MultinomialNB()
+
+def svc():
+    return SVC()
+
 
 def nnet():
     clf= MLPClassifier(solver='adam', hidden_layer_sizes=(120, 120, 120), random_state=123, activation='relu', learning_rate='adaptive', learning_rate_init=0.001, alpha=0.01, verbose=True)
@@ -64,12 +68,13 @@ MODELS = {
     'nnet': nnet,
     'nb': nb,
     'adaboost': adaboost,
-    'rf': rf
+    'rf': rf,
+    'svc': svc
 }
 
 def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
-    train_X = StandardScaler().fit_transform(train_X)
-    test_X = StandardScaler().fit_transform(test_X)
+    #train_X = StandardScaler().fit_transform(train_X)
+    #test_X = StandardScaler().fit_transform(test_X)
 
     print("")
     print(f"Training a {model_name} model")
