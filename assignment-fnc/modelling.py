@@ -34,7 +34,7 @@ def nb():
     return MultinomialNB()
 
 def nnet():
-    return MLPClassifier(solver='adam', hidden_layer_sizes=(10,10,10), random_state=123, verbose=True, activation='logistic')
+    return MLPClassifier(solver='adam', hidden_layer_sizes=(10,10,10), random_state=123, verbose=True, activation='logistic', learning_rate='adaptive', learning_rate_init=0.001)
 
 def simple_decision_tree():
     """

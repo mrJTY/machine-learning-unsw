@@ -41,62 +41,42 @@ def merge_stance_and_body(stance_df, body_df, prop=1):
     if prop < 1:
         n_total = merged.shape[0]
         n_samples = int(n_total * prop)
-        print(f"Sampling the dataset with only {n_samples} samples")
+        print(f"Training the dataset with only {prop*100}% of the training set")
         merged = merged.sample(n=n_samples, random_state=123)
 
     return merged
 
-def count_refutes(train_df, test_df):
+def count_refutes(df):
     """
     Count the number of times a refusal word was seen in the headline
     Assumes that df already has headline and article body
     """
-    print("Counting the number of refutes...")
-    train_X = fe.refuting_features(train_df['Headline'], train_df['articleBody'])
-    test_X = fe.refuting_features(test_df['Headline'], test_df['articleBody'])
-    print(f"Train refutes shape {train_X.shape}")
-    print(f"Test refutes shape {test_X.shape}")
-    print("")
-    return train_X, test_X
+    X = fe.refuting_features(df['Headline'], df['articleBody'])
+    return X
 
-def count_overlaps(train_df, test_df):
+def count_overlaps(df):
     """
     Count the number of times
     Assumes that df already has headline and article body
     """
-    print("Counting the number of overlaps...")
-    train_X = fe.word_overlap_features(train_df['Headline'], train_df['articleBody'])
-    test_X = fe.word_overlap_features(test_df['Headline'], test_df['articleBody'])
-    print(f"Train refutes shape {train_X.shape}")
-    print(f"Test refutes shape {test_X.shape}")
-    print("")
-    return train_X, test_X
+    X = fe.word_overlap_features(df['Headline'], df['articleBody'])
+    return X
 
-def count_polarity(train_df, test_df):
+def count_polarity(df):
     """
     Count the number of times
     Assumes that df already has headline and article body
     """
-    print("Counting the number of polarity...")
-    train_X = fe.word_overlap_features(train_df['Headline'], train_df['articleBody'])
-    test_X = fe.word_overlap_features(test_df['Headline'], test_df['articleBody'])
-    print(f"Train refutes shape {train_X.shape}")
-    print(f"Test refutes shape {test_X.shape}")
-    print("")
-    return train_X, test_X
+    X = fe.word_overlap_features(df['Headline'], df['articleBody'])
+    return X
 
-def count_hand(train_df, test_df):
+def count_hand(df):
     """
     Count the number of times
     Assumes that df already has headline and article body
     """
-    print("Counting the number of hand...")
-    train_X = fe.word_overlap_features(train_df['Headline'], train_df['articleBody'])
-    test_X = fe.word_overlap_features(test_df['Headline'], test_df['articleBody'])
-    print(f"Train refutes shape {train_X.shape}")
-    print(f"Test refutes shape {test_X.shape}")
-    print("")
-    return train_X, test_X
+    X = fe.word_overlap_features(df['Headline'], df['articleBody'])
+    return X
 
 
 def tfvectorizer(train, test):
@@ -146,6 +126,25 @@ def load_pickles(train_prop):
             pickle.load(open(f"data/test_Y_{train_prop}.pickle", "rb")))
 
 
+def preprocess_features(df, tfidf_bag_of_words):
+    print("Reducing dimensions of bag of words...")
+    reduced_bag_of_words, explained_var = reduce_dimensions(tfidf_bag_of_words)
+    print("Explained variance of SVD on features: {}%".format(int(explained_var * 100)))
+
+    print("Calculating refutes...")
+    refutes = count_refutes(df)
+    print("Calculating overlaps...")
+    overlaps = count_overlaps(df)
+    print("Calculating polarity...")
+    polarity = count_polarity(df)
+    print("Calculating hand...")
+    hand = count_hand(df)
+
+    X = np.hstack([reduced_bag_of_words, refutes, overlaps, polarity, hand])
+    print(f"Feature shape {X.shape}")
+    print("")
+    return X
+
 
 def preprocess_data(datasources, train_key='train', test_key='test', train_prop=1):
     """
@@ -165,31 +164,17 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     print(f"Test shape : {test.shape}")
     print("")
 
-    # TfIDF Vectorize
-    train_words, test_words = create_tfidf_matrix(train, test)
-    train_bag_of_words, explained_var_train = reduce_dimensions(train_words)
-    print("Explained variance of SVD on train features: {}%".format(int(explained_var_train * 100)))
-    test_bag_of_words, explained_var_test = reduce_dimensions(test_words)
-    print("Explained variance of SVD on test features: {}%".format(int(explained_var_test * 100)))
+    # TfIDF needs to be done with both train and test
+    train_bag_of_words, test_bag_of_words = create_tfidf_matrix(train, test)
 
-    # Count refutes
-    train_refutes, test_refutes = count_refutes(train, test)
+    # Process feature
+    print("Train set processing...")
+    train_X = preprocess_features(train, train_bag_of_words)
+    print("Test set processing...")
+    test_X = preprocess_features(test, test_bag_of_words)
 
-    # Count overlap
-    train_overlaps, test_overlaps = count_overlaps(train, test)
-
-    # Count polarity
-    train_polarity, test_polarity = count_polarity(train, test)
-
-    # Count hand
-    train_hand, test_hand = count_hand(train, test)
-
-    # Create the X features and Y labels
-    train_X = np.hstack([train_bag_of_words, train_refutes, train_overlaps, train_polarity, train_hand])
+    # Process labels
     train_Y = train['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
-
-    # Create the X features and Y labels
-    test_X = np.hstack([test_bag_of_words, test_refutes, test_overlaps, test_polarity, test_hand])
     test_Y = test['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop)
