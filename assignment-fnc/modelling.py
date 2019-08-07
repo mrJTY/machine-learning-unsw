@@ -9,6 +9,7 @@ import config
 from sklearn.metrics import accuracy_score
 import fnc_challenge_utils.scoring as scoring
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.metrics import f1_score
 import time
 
 import lightgbm as lgb
@@ -95,10 +96,13 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     test_pred = [config.LABELS[int(a)] for a in model.predict(test_X)]
 
     # Scoring from the FNC challenge
-    print("Training score:")
+    print("Training FNC Score:")
     train_score = scoring.report_score(train_Y_labels, train_pred)
+    f1_train_score = f1_score(train_Y_labels, train_pred, average="macro")
+    print(f"Train F1 Score: {f1_train_score}")
     print("")
-    print("Test Score:")
+    print("Test FNC Score:")
     test_score = scoring.report_score(test_Y_labels, test_pred)
-
+    f1_test_score = f1_score(test_Y_labels, test_pred, average="macro")
+    print(f"Test F1 Score: {f1_test_score}")
     return model

@@ -9,6 +9,7 @@ import numpy as np
 import config
 import fnc_challenge_utils.feature_engineering as fe
 from sklearn.decomposition import TruncatedSVD
+from sklearn.preprocessing import StandardScaler
 import pdb
 
 
@@ -102,7 +103,7 @@ def create_tfidf_matrix(train, test):
     return train_words, test_words
 
 def reduce_dimensions(input_matrix):
-    svd = TruncatedSVD(n_components=500, n_iter=7, random_state=123)
+    svd = TruncatedSVD(n_components=200, n_iter=7, random_state=123)
     output = svd.fit_transform(input_matrix)
     explained_variance = svd.explained_variance_ratio_.sum()
     return output, explained_variance
@@ -132,15 +133,16 @@ def preprocess_features(df, tfidf_bag_of_words):
     print("Explained variance of SVD on features: {}%".format(int(explained_var * 100)))
 
     print("Calculating refutes...")
-    refutes = count_refutes(df)
+    refutes = StandardScaler().fit_transform(count_refutes(df))
     print("Calculating overlaps...")
-    overlaps = count_overlaps(df)
-    print("Calculating polarity...")
-    polarity = count_polarity(df)
-    print("Calculating hand...")
-    hand = count_hand(df)
+    overlaps = StandardScaler().fit_transform(count_overlaps(df))
+    #print("Calculating polarity...")
+    #polarity = StandardScaler().fit_transform(count_polarity(df))
+    #print("Calculating hand...")
+    #hand = StandardScaler().fit_transform(count_hand(df))
 
-    X = np.hstack([reduced_bag_of_words, refutes, overlaps, polarity, hand])
+    X = np.hstack([reduced_bag_of_words, refutes, overlaps])
+    # Scale all variables
     print(f"Feature shape {X.shape}")
     print("")
     return X
@@ -178,6 +180,4 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     test_Y = test['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
     write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop)
-
-
 
