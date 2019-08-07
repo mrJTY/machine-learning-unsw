@@ -4,6 +4,7 @@ import config
 import argparse
 import fnc_challenge_utils.scoring as scoring
 import numpy as np
+import keras_nnet
 
 def parse_args():
     parser = argparse.ArgumentParser();
@@ -28,9 +29,16 @@ if __name__ == '__main__':
 
 
     # Train the model
-    if args.model != "":
+    if args.model == "keras_nnet":
+        train_X, train_Y, test_X, test_Y = pe.load_pickles(train_prop)
+        keras_nnet.keras_nnet(train_X, train_Y, test_X, test_Y)
+
+
+    elif args.model != "":
         # Load the pickles
         train_X, train_Y, test_X, test_Y = pe.load_pickles(train_prop)
         mo.train_sklearn_model(args.model, train_X, train_Y, test_X, test_Y)
+    else:
+        print("No model trained!")
 
 

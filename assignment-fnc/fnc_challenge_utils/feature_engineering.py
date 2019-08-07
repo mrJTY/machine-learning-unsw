@@ -47,12 +47,11 @@ def word_overlap_features(headlines, bodies):
         clean_body = clean(body)
         clean_headline = get_tokenized_lemmas(clean_headline)
         clean_body = get_tokenized_lemmas(clean_body)
-        features = [
-            len(set(clean_headline).intersection(clean_body)) / float(len(set(clean_headline).union(clean_body)))]
+        features = len(set(clean_headline).intersection(clean_body)) / float(len(set(clean_headline).union(clean_body)))
         X.append(features)
 
     # I'm just going to return an average overlap rate
-    X = [np.mean(i) for i in X]
+    X = [i for i in X]
 
     return np.array(X)[np.newaxis].T
 

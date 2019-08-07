@@ -33,10 +33,10 @@ Choose the models from `modelling.py`
 
 # Example
 
-Train a tree model using only 25% of training set
+Train a the baseline model using only 25% of training set
 
 ```
-$ python main.py --train_prop 0.25 --model tree > logs/tree_0.25.log
+$ python main.py --train_prop 0.25 --model gbm > logs/gbm_0.25.log
 ```
 
 # Logs

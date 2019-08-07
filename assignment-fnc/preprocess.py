@@ -136,7 +136,9 @@ def preprocess_features(df, tfidf_bag_of_words):
     refutes = count_refutes(df)
     print("Calculating overlaps...")
     overlaps = count_overlaps(df)
-    X = np.hstack([reduced_bag_of_words, refutes, overlaps])
+    print("Calculating hand in hand cooccurence...")
+    hand = count_hand(df)
+    X = np.hstack([reduced_bag_of_words, refutes, overlaps, hand])
 
     print(f"Feature shape {X.shape}")
     print("")

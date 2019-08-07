@@ -11,31 +11,21 @@ import fnc_challenge_utils.scoring as scoring
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.metrics import f1_score
 import time
+from sklearn.ensemble import RandomForestClassifier
 
-import lightgbm as lgb
-
-def lightgbm_model(train_X, train_Y, test_X, test_Y):
-    param = {'num_leaves': 31, 'objective': 'binary'}
-    param['metric'] = 'auc'
-    num_round = 10
-    train_data = lgb.Dataset(train_X, label=train_Y)
-    best_model = lgb.train(param, train_data, num_round)
-
-    lgb.cv(param, train_data, num_round, nfold=5)
-
-    pred_Y = best_model.predict(test_X)
-    import pdb
-    pdb.set_trace()
-
+def rf():
+    return RandomForestClassifier(random_state=123, n_estimators=200)
 
 def adaboost():
-    return AdaBoostClassifier(random_state=123)
+    return AdaBoostClassifier(random_state=123, n_estimators=200)
 
 def nb():
     return MultinomialNB()
 
 def nnet():
-    return MLPClassifier(solver='adam', hidden_layer_sizes=(10,10,10), random_state=123, verbose=True, activation='logistic', learning_rate='adaptive', learning_rate_init=0.001)
+    clf= MLPClassifier(solver='adam', hidden_layer_sizes=(120, 120, 120), random_state=123, activation='relu', learning_rate='adaptive', learning_rate_init=0.001, alpha=0.01, verbose=True)
+    clf.out_activation_ = 'softmax'
+    return clf
 
 def simple_decision_tree():
     """
@@ -64,7 +54,7 @@ def gbm():
     Gradient boosting model
     This was the baseline of the FNC challenge
     """
-    return GradientBoostingClassifier()
+    return GradientBoostingClassifier(n_estimators=200)
 
 
 MODELS = {
@@ -73,15 +63,19 @@ MODELS = {
     'gbm': gbm,
     'nnet': nnet,
     'nb': nb,
-    'adaboost': adaboost
+    'adaboost': adaboost,
+    'rf': rf
 }
 
 def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
-    start_time = time.time()
+    train_X = StandardScaler().fit_transform(train_X)
+    test_X = StandardScaler().fit_transform(test_X)
+
     print("")
     print(f"Training a {model_name} model")
     print("")
     model = MODELS[model_name]()
+    start_time = time.time()
     model.fit(train_X, train_Y)
     print(f"Training time took {time.time() - start_time} seconds")
     print("")
@@ -96,13 +90,18 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     test_pred = [config.LABELS[int(a)] for a in model.predict(test_X)]
 
     # Scoring from the FNC challenge
-    print("Training FNC Score:")
+    print("Train FNC Score:")
     train_score = scoring.report_score(train_Y_labels, train_pred)
     f1_train_score = f1_score(train_Y_labels, train_pred, average="macro")
     print(f"Train F1 Score: {f1_train_score}")
+    acc_train_score = accuracy_score(train_Y_labels, train_pred)
+    print(f"Train Accuracy Score: {acc_train_score}")
     print("")
+
     print("Test FNC Score:")
     test_score = scoring.report_score(test_Y_labels, test_pred)
     f1_test_score = f1_score(test_Y_labels, test_pred, average="macro")
     print(f"Test F1 Score: {f1_test_score}")
+    acc_test_score = accuracy_score(test_Y_labels, test_pred)
+    print(f"Test Accuracy Score: {acc_test_score}")
     return model
