@@ -8,7 +8,7 @@ import numpy as np
 def parse_args():
     parser = argparse.ArgumentParser();
     parser.add_argument("--skip_preprocess", help="If flag is true, it will skip preprocessing the data and load .pickle files in the data/ folder", action="store_true")
-    parser.add_argument("--model", help="Model name", required=True)
+    parser.add_argument("--model", help="Model name", default="")
     parser.add_argument("--train_prop", help="The proportion of training dataset to read from. Between 0 and 1", default=1)
     parser.add_argument("--test_prop", help="The proportion of training dataset to read from. Between 0 and 1", default=1)
     args = parser.parse_args()
@@ -25,14 +25,14 @@ if __name__ == '__main__':
     if args.skip_preprocess:
         pass
     else:
+         # Run the preprocessing and dump as pickles
          pe.preprocess_data(datasources=config.DATASOURCES, train_prop=train_prop, test_prop=test_prop)
 
-    train_X, train_Y, test_X, test_Y = pe.load_pickles()
 
-
-    if args.model == 'lightgbm':
-        mo.lightgbm_model(train_X, train_Y, test_X, test_Y)
-    else:
+    # Train the model
+    if args.model != "":
+        # Load the pickles
+        train_X, train_Y, test_X, test_Y = pe.load_pickles(train_prop, test_prop)
         mo.train_sklearn_model(args.model, train_X, train_Y, test_X, test_Y)
 
 

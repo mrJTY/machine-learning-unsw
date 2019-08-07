@@ -120,23 +120,23 @@ def create_tfidf_matrix(train, test):
     print("")
     return train_words, test_words
 
-def write_to_pickle(train_X, train_Y, test_X, test_Y):
+def write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop, test_prop):
     """
     Dump to a pickle for faster load
     """
-    pickle.dump(train_X, open("data/train_X.pickle", "wb"))
-    pickle.dump(train_Y, open("data/train_Y.pickle", "wb"))
-    pickle.dump(test_X, open("data/test_X.pickle", "wb"))
-    pickle.dump(test_Y, open("data/test_Y.pickle", "wb"))
+    pickle.dump(train_X, open(f"data/train_X_{train_prop}.pickle", "wb"))
+    pickle.dump(train_Y, open(f"data/train_Y_{train_prop}.pickle", "wb"))
+    pickle.dump(test_X, open(f"data/test_X_{test_prop}.pickle", "wb"))
+    pickle.dump(test_Y, open(f"data/test_Y_{test_prop}.pickle", "wb"))
 
-def load_pickles():
+def load_pickles(train_prop, test_prop):
     """
     Dump to a pickle for faster load
     """
-    return (pickle.load(open("data/train_X.pickle", "rb")),
-            pickle.load(open("data/train_Y.pickle", "rb")),
-            pickle.load(open("data/test_X.pickle", "rb")),
-            pickle.load(open("data/test_Y.pickle", "rb")))
+    return (pickle.load(open(f"data/train_X_{train_prop}.pickle", "rb")),
+            pickle.load(open(f"data/train_Y_{train_prop}.pickle", "rb")),
+            pickle.load(open(f"data/test_X_{test_prop}.pickle", "rb")),
+            pickle.load(open(f"data/test_Y_{test_prop}.pickle", "rb")))
 
 
 
@@ -172,7 +172,6 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     train_hand, test_hand = count_hand(train, test)
 
     # Create the X features and Y labels
-    #pdb.set_trace()
     train_X = sp.hstack((train_words, train_refutes, train_overlaps, train_polarity, train_hand))
     train_Y = train['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
@@ -180,7 +179,7 @@ def preprocess_data(datasources, train_key='train', test_key='test', train_prop=
     test_X = sp.hstack((test_words, test_refutes,test_overlaps, test_polarity, test_hand))
     test_Y = test['Stance'].apply(lambda key: config.LABEL_LOOKUP[key])
 
-    write_to_pickle(train_X, train_Y, test_X, test_Y)
+    write_to_pickle(train_X, train_Y, test_X, test_Y, train_prop, test_prop)
 
 
 

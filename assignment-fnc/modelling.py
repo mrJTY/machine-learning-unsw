@@ -34,7 +34,7 @@ def nb():
     return MultinomialNB()
 
 def nnet():
-    return MLPClassifier(solver='adam', hidden_layer_sizes=(3, 3), random_state=123,
+    return MLPClassifier(solver='adam', hidden_layer_sizes=(3, 3), random_state=123, activation='logistic',
                           alpha=0.005, verbose=False
     )
 
