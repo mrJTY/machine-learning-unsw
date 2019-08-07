@@ -103,7 +103,7 @@ def create_tfidf_matrix(train, test):
     return train_words, test_words
 
 def reduce_dimensions(input_matrix):
-    svd = TruncatedSVD(n_components=200, n_iter=7, random_state=123)
+    svd = TruncatedSVD(n_components=10, n_iter=7, random_state=123)
     output = svd.fit_transform(input_matrix)
     explained_variance = svd.explained_variance_ratio_.sum()
     return output, explained_variance
@@ -133,16 +133,11 @@ def preprocess_features(df, tfidf_bag_of_words):
     print("Explained variance of SVD on features: {}%".format(int(explained_var * 100)))
 
     print("Calculating refutes...")
-    refutes = StandardScaler().fit_transform(count_refutes(df))
+    refutes = count_refutes(df)
     print("Calculating overlaps...")
-    overlaps = StandardScaler().fit_transform(count_overlaps(df))
-    #print("Calculating polarity...")
-    #polarity = StandardScaler().fit_transform(count_polarity(df))
-    #print("Calculating hand...")
-    #hand = StandardScaler().fit_transform(count_hand(df))
-
+    overlaps = count_overlaps(df)
     X = np.hstack([reduced_bag_of_words, refutes, overlaps])
-    # Scale all variables
+
     print(f"Feature shape {X.shape}")
     print("")
     return X

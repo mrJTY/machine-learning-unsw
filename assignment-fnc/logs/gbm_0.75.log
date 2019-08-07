@@ -1,0 +1,70 @@
+Namespace(model='gbm', skip_preprocess=False, train_prop='0.75')
+Reading data..
+Original data sizes
+1683
+
+Training the dataset with only 75.0% of the training set
+Train shape : (37479, 4)
+Test shape : (25413, 4)
+
+Fitting a tfidf vectorizer..
+Tfidf vectorized train_words shape: (37479, 29161)
+Tfidf vectorized test_words shape: (25413, 29161)
+
+Train set processing...
+Reducing dimensions of bag of words...
+Explained variance of SVD on features: 62%
+Calculating refutes...
+Calculating overlaps...
+Feature shape (37479, 202)
+
+Test set processing...
+Reducing dimensions of bag of words...
+Explained variance of SVD on features: 76%
+Calculating refutes...
+Calculating overlaps...
+Feature shape (25413, 202)
+
+
+Training a gbm model
+
+Training time took 245.65477561950684 seconds
+
+Trained a model using GradientBoostingClassifier(criterion='friedman_mse', init=None,
+              learning_rate=0.1, loss='deviance', max_depth=3,
+              max_features=None, max_leaf_nodes=None,
+              min_impurity_decrease=0.0, min_impurity_split=None,
+              min_samples_leaf=1, min_samples_split=2,
+              min_weight_fraction_leaf=0.0, n_estimators=100,
+              n_iter_no_change=None, presort='auto', random_state=None,
+              subsample=1.0, tol=0.0001, validation_fraction=0.1,
+              verbose=0, warm_start=False)
+Training FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |   1304    |    63     |    693    |    711    |
+-------------------------------------------------------------
+| disagree  |    109    |    188    |    139    |    204    |
+-------------------------------------------------------------
+|  discuss  |    250    |    26     |   5047    |   1336    |
+-------------------------------------------------------------
+| unrelated |    162    |    22     |    780    |   26445   |
+-------------------------------------------------------------
+Score: 13470.25 out of 16922.25	(79.60082140377314%)
+Train F1 Score: 0.6671235701931276
+
+Test FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |    107    |    36     |   1182    |    578    |
+-------------------------------------------------------------
+| disagree  |    38     |     0     |    312    |    347    |
+-------------------------------------------------------------
+|  discuss  |    425    |    26     |   2819    |   1194    |
+-------------------------------------------------------------
+| unrelated |    207    |    115    |   1080    |   16947   |
+-------------------------------------------------------------
+Score: 7667.5 out of 11651.25	(65.80838965776205%)
+Test F1 Score: 0.38943085214882667
