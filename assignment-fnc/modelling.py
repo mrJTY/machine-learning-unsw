@@ -12,6 +12,10 @@ from sklearn.metrics import f1_score, accuracy_score
 import time
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
+from xgboost import XGBClassifier
+
+def xgboost_clf():
+    return XGBClassifier(objective='multi:softmax', n_estimators=200, reg_alpha=0.25, max_depth=5, max_delta_step=10)
 
 def rf():
     return RandomForestClassifier(random_state=123, n_estimators=200)
@@ -69,7 +73,8 @@ MODELS = {
     'nb': nb,
     'adaboost': adaboost,
     'rf': rf,
-    'svc': svc
+    'svc': svc,
+    'xgboost': xgboost_clf
 }
 
 def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):

@@ -34,9 +34,6 @@ if __name__ == '__main__':
     # Train the model
     if args.model == "keras_nnet":
         keras_nnet.keras_nnet(train_X, train_Y, test_X, test_Y)
-    elif args.model == "xgboost":
-        xgboost_clf.train_xgboost(train_X, train_Y, test_X, test_Y)
-
     elif args.model != "":
         mo.train_sklearn_model(args.model, train_X, train_Y, test_X, test_Y)
     else:
