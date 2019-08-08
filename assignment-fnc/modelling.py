@@ -13,12 +13,36 @@ import time
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from xgboost import XGBClassifier
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+from learning_curve import plot_learning_curve
+from sklearn.model_selection import ShuffleSplit
+from validation_curve import plot_validation_curve
 
 def xgboost_clf():
-    return XGBClassifier(objective='multi:softmax', n_estimators=200, reg_alpha=0.25, max_depth=5, max_delta_step=10)
+    return XGBClassifier(n_estimators=200, reg_alpha=0.25, reg_lambda=1.25, max_depth=config.MAX_DEPTH, max_delta_step=10, random_state=123)
+
+def fit_xgboost(model, train_X, train_Y, test_X, test_Y):
+    # Split out an validation set
+    eval_set = [(train_X, train_Y), (test_X, test_Y)]
+    model.fit(train_X, train_Y, eval_set=eval_set, early_stopping_rounds=5, eval_metric=["mlogloss"])
+    # Performance metrics specifc to XGBOOST
+    # Reference: https://machinelearningmastery.com/avoid-overfitting-by-early-stopping-with-xgboost-in-python
+    pred = model.predict(test_X)
+    results = model.evals_result()
+    epochs = len(results['validation_0']['mlogloss'])
+    x_axis = range(0, epochs)
+    fig, ax = plt.subplots()
+    ax.plot(x_axis, results['validation_0']['mlogloss'], label='Train')
+    ax.plot(x_axis, results['validation_1']['mlogloss'], label='Test')
+    ax.legend()
+    plt.ylabel('Log Loss')
+    plt.title('XGBoost Log Loss')
+    plt.savefig("img/xgboost_logloss.png")
+    return model
 
 def rf():
-    return RandomForestClassifier(random_state=123, n_estimators=200)
+    return RandomForestClassifier(random_state=123, n_estimators=200, max_depth=config.MAX_DEPTH)
 
 def adaboost():
     return AdaBoostClassifier(random_state=123, n_estimators=200)
@@ -31,7 +55,7 @@ def svc():
 
 
 def nnet():
-    clf= MLPClassifier(solver='adam', hidden_layer_sizes=(120, 120, 120), random_state=123, activation='relu', learning_rate='adaptive', learning_rate_init=0.001, alpha=0.01, verbose=True)
+    clf= MLPClassifier(solver='adam', hidden_layer_sizes=(120, 120, 120), random_state=123, activation='relu', learning_rate='adaptive', learning_rate_init=0.001, alpha=0.1, verbose=True)
     clf.out_activation_ = 'softmax'
     return clf
 
@@ -64,11 +88,19 @@ def gbm():
     """
     return GradientBoostingClassifier(n_estimators=200)
 
+def gbm_tune():
+    """
+    Gradient boosting model
+    This was the baseline of the FNC challenge
+    """
+    return GradientBoostingClassifier(n_estimators=200, max_features='sqrt', max_depth=config.MAX_DEPTH, min_samples_leaf=25)
+
 
 MODELS = {
     'tree': simple_decision_tree,
     'random_tree': random_cv_tree,
     'gbm': gbm,
+    'gbm_tune': gbm_tune,
     'nnet': nnet,
     'nb': nb,
     'adaboost': adaboost,
@@ -78,15 +110,28 @@ MODELS = {
 }
 
 def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
-    #train_X = StandardScaler().fit_transform(train_X)
-    #test_X = StandardScaler().fit_transform(test_X)
+    train_X = StandardScaler().fit_transform(train_X)
+    test_X = StandardScaler().fit_transform(test_X)
 
     print("")
     print(f"Training a {model_name} model")
     print("")
     model = MODELS[model_name]()
     start_time = time.time()
-    model.fit(train_X, train_Y)
+
+    if model_name == "xgboost":
+        # Xgboost has a custom fit
+        fit_xgboost(model, train_X, train_Y, test_X, test_Y)
+        plot_validation_curve(model, model_name, train_X, train_Y, "gamma", [0.01, 0.1, 1.0, 5.0])
+    elif model_name == "tree":
+        # Plot some validation curves on the parameters
+        model.fit(train_X, train_Y)
+        plot_validation_curve(model, model_name, train_X, train_Y, "max_depth", np.linspace(3, 10, 3))
+        plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_split", [int(i) for i in np.linspace(2, 50, 4)])
+        plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_leaf", [int(i) for i in np.linspace(2, 100, 4)])
+    else:
+        model.fit(train_X, train_Y)
+
     print(f"Training time took {time.time() - start_time} seconds")
     print("")
     print(f"Trained a model using {model}")
@@ -114,4 +159,10 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     print(f"Test F1 Score: {f1_test_score}")
     acc_test_score = accuracy_score(test_Y_labels, test_pred)
     print(f"Test Accuracy Score: {acc_test_score}")
+
+    print("Plotting learning plots...")
+    cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=0)
+    plot_learning_curve(model, model_name, train_X, train_Y, ylim=(0.7, 1.01), cv=cv, n_jobs=4)
+
+
     return model

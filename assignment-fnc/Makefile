@@ -5,7 +5,7 @@ install:
 copy:
 	cp ~/Downloads/Learning\ to\ predict\ the\ stace\ of\ news\ articles.pdf report.pdf
 
-zip: copy
+zip:
 	rm -f files.zip && \
 	zip -r files.zip logs sbin *.py *.txt fnc_challenge_utils data/placeholder Makefile README.md --exclude *.pyc
 
