@@ -86,4 +86,4 @@ def plot_learning_curve(estimator, model_name, X, y, ylim=None, cv=None,
              label="Cross-validation score")
 
     plt.legend(loc="best")
-    plt.savefig("img/f{model_name}_learning_curve.png")
+    plt.savefig(f"img/f{model_name}_learning_curve.png")

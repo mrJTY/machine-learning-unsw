@@ -127,8 +127,8 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
         # Plot some validation curves on the parameters
         model.fit(train_X, train_Y)
         plot_validation_curve(model, model_name, train_X, train_Y, "max_depth", np.linspace(3, 10, 3))
-        plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_split", np.linspace(2, 50, 4))
-        plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_leaf", np.linspace(2, 100, 4))
+        plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_split", [int(i) for i in np.linspace(2, 50, 4)])
+        plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_leaf", [int(i) for i in np.linspace(2, 100, 4)])
     else:
         model.fit(train_X, train_Y)
 
