@@ -120,11 +120,12 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     start_time = time.time()
 
     if model_name == "xgboost":
-        plot_validation_curve(model, model_name, train_X, train_Y, "gamma", [0.01, 0.1, 1.0, 5.0])
         # Xgboost has a custom fit
         fit_xgboost(model, train_X, train_Y, test_X, test_Y)
+        plot_validation_curve(model, model_name, train_X, train_Y, "gamma", [0.01, 0.1, 1.0, 5.0])
     elif model_name == "tree":
         # Plot some validation curves on the parameters
+        model.fit(train_X, train_Y)
         plot_validation_curve(model, model_name, train_X, train_Y, "max_depth", np.linspace(3, 10, 3))
         plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_split", np.linspace(2, 50, 4))
         plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_leaf", np.linspace(2, 100, 4))

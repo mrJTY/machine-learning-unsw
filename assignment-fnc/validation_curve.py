@@ -19,12 +19,12 @@ def plot_validation_curve(estimator, model_name, X, y, param_name, param_range =
     plt.ylabel("Score")
     plt.ylim(0.0, 1.1)
     lw = 2
-    plt.semilogx(param_range, train_scores_mean, label="Training score",
+    plt.plot(param_range, train_scores_mean, label="Training score",
                 color="darkorange", lw=lw)
     plt.fill_between(param_range, train_scores_mean - train_scores_std,
                     train_scores_mean + train_scores_std, alpha=0.2,
                     color="darkorange", lw=lw)
-    plt.semilogx(param_range, test_scores_mean, label="Cross-validation score",
+    plt.plot(param_range, test_scores_mean, label="Cross-validation score",
                 color="navy", lw=lw)
     plt.fill_between(param_range, test_scores_mean - test_scores_std,
                     test_scores_mean + test_scores_std, alpha=0.2,
