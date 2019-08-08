@@ -1,70 +1,47 @@
-Namespace(model='gbm', skip_preprocess=False, train_prop='0.25')
-Reading data..
-Original data sizes
-1683
-
-Training the dataset with only 25.0% of the training set
-Train shape : (12493, 4)
-Test shape : (25413, 4)
-
-Fitting a tfidf vectorizer..
-Tfidf vectorized train_words shape: (12493, 28385)
-Tfidf vectorized test_words shape: (25413, 28385)
-
-Train set processing...
-Reducing dimensions of bag of words...
-Explained variance of SVD on features: 63%
-Calculating refutes...
-Calculating overlaps...
-Feature shape (12493, 202)
-
-Test set processing...
-Reducing dimensions of bag of words...
-Explained variance of SVD on features: 75%
-Calculating refutes...
-Calculating overlaps...
-Feature shape (25413, 202)
-
+Namespace(model='gbm', skip_preprocess=True, train_prop='0.25')
 
 Training a gbm model
 
-Training time took 93.14040064811707 seconds
+Training time took 170.19745135307312 seconds
 
 Trained a model using GradientBoostingClassifier(criterion='friedman_mse', init=None,
-              learning_rate=0.1, loss='deviance', max_depth=3,
-              max_features=None, max_leaf_nodes=None,
-              min_impurity_decrease=0.0, min_impurity_split=None,
-              min_samples_leaf=1, min_samples_split=2,
-              min_weight_fraction_leaf=0.0, n_estimators=100,
-              n_iter_no_change=None, presort='auto', random_state=None,
-              subsample=1.0, tol=0.0001, validation_fraction=0.1,
-              verbose=0, warm_start=False)
-Training FNC Score:
+                           learning_rate=0.1, loss='deviance', max_depth=3,
+                           max_features=None, max_leaf_nodes=None,
+                           min_impurity_decrease=0.0, min_impurity_split=None,
+                           min_samples_leaf=1, min_samples_split=2,
+                           min_weight_fraction_leaf=0.0, n_estimators=200,
+                           n_iter_no_change=None, presort='auto',
+                           random_state=None, subsample=1.0, tol=0.0001,
+                           validation_fraction=0.1, verbose=0,
+                           warm_start=False)
+Train FNC Score:
 -------------------------------------------------------------
 |           |   agree   | disagree  |  discuss  | unrelated |
 -------------------------------------------------------------
-|   agree   |    504    |    19     |    191    |    212    |
+|   agree   |    581    |    16     |    154    |    175    |
 -------------------------------------------------------------
-| disagree  |    29     |    90     |    50     |    50     |
+| disagree  |    21     |    135    |    27     |    36     |
 -------------------------------------------------------------
-|  discuss  |    62     |     5     |   1728    |    399    |
+|  discuss  |    52     |     8     |   1812    |    322    |
 -------------------------------------------------------------
-| unrelated |    48     |     4     |    230    |   8872    |
+| unrelated |    46     |     9     |    189    |   8910    |
 -------------------------------------------------------------
-Score: 4629.0 out of 5627.5	(82.25677476677032%)
-Train F1 Score: 0.7282038206392772
+Score: 4825.0 out of 5627.5	(85.73967125721902%)
+Train F1 Score: 0.7996710493667785
+Train Accuracy Score: 0.9155527095173297
 
 Test FNC Score:
 -------------------------------------------------------------
 |           |   agree   | disagree  |  discuss  | unrelated |
 -------------------------------------------------------------
-|   agree   |    74     |    16     |   1338    |    475    |
+|   agree   |    118    |    42     |   1299    |    444    |
 -------------------------------------------------------------
-| disagree  |     9     |    13     |    351    |    324    |
+| disagree  |    18     |    29     |    323    |    327    |
 -------------------------------------------------------------
-|  discuss  |    209    |    49     |   3203    |   1003    |
+|  discuss  |    414    |    99     |   3066    |    885    |
 -------------------------------------------------------------
-| unrelated |    158    |    146    |   1358    |   16687   |
+| unrelated |    368    |    275    |   1761    |   15945   |
 -------------------------------------------------------------
-Score: 7954.75 out of 11651.25	(68.27379036584057%)
-Test F1 Score: 0.39875113863974115
+Score: 7748.0 out of 11651.25	(66.49930264993027%)
+Test F1 Score: 0.3958525974562754
+Test Accuracy Score: 0.7538661315074962

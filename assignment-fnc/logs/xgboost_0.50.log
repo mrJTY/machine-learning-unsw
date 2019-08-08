@@ -1,0 +1,44 @@
+Namespace(model='xgboost', skip_preprocess=True, train_prop='0.50')
+
+Training a xgboost model
+
+Training time took 277.11601185798645 seconds
+
+Trained a model using XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
+              colsample_bynode=1, colsample_bytree=1, gamma=0,
+              learning_rate=0.1, max_delta_step=10, max_depth=5,
+              min_child_weight=1, missing=None, n_estimators=200, n_jobs=1,
+              nthread=None, objective='multi:softprob', random_state=0,
+              reg_alpha=0.25, reg_lambda=1, scale_pos_weight=1, seed=None,
+              silent=None, subsample=1, verbosity=1)
+Train FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |   1311    |    25     |    238    |    271    |
+-------------------------------------------------------------
+| disagree  |    53     |    262    |    51     |    76     |
+-------------------------------------------------------------
+|  discuss  |    166    |    33     |   3721    |    533    |
+-------------------------------------------------------------
+| unrelated |    92     |    20     |    360    |   17774   |
+-------------------------------------------------------------
+Score: 9879.0 out of 11301.5	(87.41317524222448%)
+Train F1 Score: 0.8082969676242107
+Train Accuracy Score: 0.9232370127271272
+
+Test FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |    91     |     6     |   1234    |    572    |
+-------------------------------------------------------------
+| disagree  |    33     |     0     |    306    |    358    |
+-------------------------------------------------------------
+|  discuss  |    244    |     4     |   3005    |   1211    |
+-------------------------------------------------------------
+| unrelated |    111    |     7     |   1001    |   17230   |
+-------------------------------------------------------------
+Score: 7860.25 out of 11651.25	(67.4627185924257%)
+Test F1 Score: 0.39759492063656915
+Test Accuracy Score: 0.7998268602683666

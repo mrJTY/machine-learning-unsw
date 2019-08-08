@@ -1,0 +1,99 @@
+Namespace(model='xgboost', skip_preprocess=True, train_prop=1)
+
+Training a xgboost model
+
+[0]	validation_0-mlogloss:1.26288	validation_1-mlogloss:1.26919
+Multiple eval metrics have been passed: 'validation_1-mlogloss' will be used for early stopping.
+
+Will train until validation_1-mlogloss hasn't improved in 5 rounds.
+[1]	validation_0-mlogloss:1.16233	validation_1-mlogloss:1.17451
+[2]	validation_0-mlogloss:1.0785	validation_1-mlogloss:1.09563
+[3]	validation_0-mlogloss:1.00699	validation_1-mlogloss:1.02835
+[4]	validation_0-mlogloss:0.945462	validation_1-mlogloss:0.971943
+[5]	validation_0-mlogloss:0.891815	validation_1-mlogloss:0.921133
+[6]	validation_0-mlogloss:0.844933	validation_1-mlogloss:0.877674
+[7]	validation_0-mlogloss:0.80389	validation_1-mlogloss:0.83918
+[8]	validation_0-mlogloss:0.767621	validation_1-mlogloss:0.80588
+[9]	validation_0-mlogloss:0.735678	validation_1-mlogloss:0.777631
+[10]	validation_0-mlogloss:0.707122	validation_1-mlogloss:0.751288
+[11]	validation_0-mlogloss:0.682014	validation_1-mlogloss:0.729037
+[12]	validation_0-mlogloss:0.659345	validation_1-mlogloss:0.708869
+[13]	validation_0-mlogloss:0.639151	validation_1-mlogloss:0.69156
+[14]	validation_0-mlogloss:0.621212	validation_1-mlogloss:0.675982
+[15]	validation_0-mlogloss:0.605034	validation_1-mlogloss:0.662697
+[16]	validation_0-mlogloss:0.590459	validation_1-mlogloss:0.651216
+[17]	validation_0-mlogloss:0.577124	validation_1-mlogloss:0.640684
+[18]	validation_0-mlogloss:0.565133	validation_1-mlogloss:0.632038
+[19]	validation_0-mlogloss:0.554341	validation_1-mlogloss:0.62396
+[20]	validation_0-mlogloss:0.544764	validation_1-mlogloss:0.616988
+[21]	validation_0-mlogloss:0.536141	validation_1-mlogloss:0.610873
+[22]	validation_0-mlogloss:0.528175	validation_1-mlogloss:0.605826
+[23]	validation_0-mlogloss:0.520821	validation_1-mlogloss:0.600822
+[24]	validation_0-mlogloss:0.514396	validation_1-mlogloss:0.59651
+[25]	validation_0-mlogloss:0.50812	validation_1-mlogloss:0.592513
+[26]	validation_0-mlogloss:0.502525	validation_1-mlogloss:0.589551
+[27]	validation_0-mlogloss:0.497429	validation_1-mlogloss:0.586513
+[28]	validation_0-mlogloss:0.492597	validation_1-mlogloss:0.583924
+[29]	validation_0-mlogloss:0.488177	validation_1-mlogloss:0.581711
+[30]	validation_0-mlogloss:0.483687	validation_1-mlogloss:0.580097
+[31]	validation_0-mlogloss:0.479698	validation_1-mlogloss:0.578436
+[32]	validation_0-mlogloss:0.475932	validation_1-mlogloss:0.576476
+[33]	validation_0-mlogloss:0.472628	validation_1-mlogloss:0.575288
+[34]	validation_0-mlogloss:0.468798	validation_1-mlogloss:0.573623
+[35]	validation_0-mlogloss:0.465839	validation_1-mlogloss:0.572777
+[36]	validation_0-mlogloss:0.462685	validation_1-mlogloss:0.572025
+[37]	validation_0-mlogloss:0.459826	validation_1-mlogloss:0.570955
+[38]	validation_0-mlogloss:0.457222	validation_1-mlogloss:0.571093
+[39]	validation_0-mlogloss:0.45458	validation_1-mlogloss:0.570594
+[40]	validation_0-mlogloss:0.451853	validation_1-mlogloss:0.57023
+[41]	validation_0-mlogloss:0.449505	validation_1-mlogloss:0.570055
+[42]	validation_0-mlogloss:0.4472	validation_1-mlogloss:0.569805
+[43]	validation_0-mlogloss:0.445022	validation_1-mlogloss:0.569668
+[44]	validation_0-mlogloss:0.442769	validation_1-mlogloss:0.57037
+[45]	validation_0-mlogloss:0.440499	validation_1-mlogloss:0.570539
+[46]	validation_0-mlogloss:0.438547	validation_1-mlogloss:0.570657
+[47]	validation_0-mlogloss:0.436532	validation_1-mlogloss:0.570426
+[48]	validation_0-mlogloss:0.434532	validation_1-mlogloss:0.570555
+Stopping. Best iteration:
+[43]	validation_0-mlogloss:0.445022	validation_1-mlogloss:0.569668
+
+Training time took 36.679949045181274 seconds
+
+Trained a model using XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
+              colsample_bynode=1, colsample_bytree=1, gamma=0,
+              learning_rate=0.1, max_delta_step=10, max_depth=3,
+              min_child_weight=1, missing=None, n_estimators=200, n_jobs=1,
+              nthread=None, objective='multi:softprob', random_state=0,
+              reg_alpha=0.25, reg_lambda=1.25, scale_pos_weight=1, seed=None,
+              silent=None, subsample=1, verbosity=1)
+Train FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |   1111    |    17     |   1313    |   1237    |
+-------------------------------------------------------------
+| disagree  |    119    |    29     |    324    |    368    |
+-------------------------------------------------------------
+|  discuss  |    302    |     5     |   6273    |   2329    |
+-------------------------------------------------------------
+| unrelated |    212    |     5     |   1584    |   34744   |
+-------------------------------------------------------------
+Score: 16619.0 out of 22563.25	(73.65516935725128%)
+Train F1 Score: 0.5200101784920415
+Train Accuracy Score: 0.8436124229568558
+
+Test FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |    44     |     0     |   1174    |    685    |
+-------------------------------------------------------------
+| disagree  |    14     |     0     |    313    |    370    |
+-------------------------------------------------------------
+|  discuss  |    133    |     0     |   2834    |   1497    |
+-------------------------------------------------------------
+| unrelated |    24     |     0     |    786    |   17539   |
+-------------------------------------------------------------
+Score: 7671.25 out of 11651.25	(65.84057504559597%)
+Test F1 Score: 0.3865733184458028
+Test Accuracy Score: 0.8034077047180577

@@ -1,0 +1,173 @@
+Namespace(model='nnet', skip_preprocess=True, train_prop='1.00')
+
+Training a nnet model
+
+Iteration 1, loss = 0.67926355
+Iteration 2, loss = 0.46424401
+Iteration 3, loss = 0.44145597
+Iteration 4, loss = 0.42784737
+Iteration 5, loss = 0.41701991
+Iteration 6, loss = 0.40768263
+Iteration 7, loss = 0.39871145
+Iteration 8, loss = 0.39577163
+Iteration 9, loss = 0.39063122
+Iteration 10, loss = 0.38512885
+Iteration 11, loss = 0.38291506
+Iteration 12, loss = 0.37864624
+Iteration 13, loss = 0.37653555
+Iteration 14, loss = 0.37367650
+Iteration 15, loss = 0.37123750
+Iteration 16, loss = 0.36891646
+Iteration 17, loss = 0.36974478
+Iteration 18, loss = 0.36613743
+Iteration 19, loss = 0.36370825
+Iteration 20, loss = 0.36050852
+Iteration 21, loss = 0.36042086
+Iteration 22, loss = 0.35900270
+Iteration 23, loss = 0.35663250
+Iteration 24, loss = 0.35527921
+Iteration 25, loss = 0.35371271
+Iteration 26, loss = 0.35428403
+Iteration 27, loss = 0.35289257
+Iteration 28, loss = 0.35231313
+Iteration 29, loss = 0.34869275
+Iteration 30, loss = 0.34896533
+Iteration 31, loss = 0.34781406
+Iteration 32, loss = 0.34661404
+Iteration 33, loss = 0.34573027
+Iteration 34, loss = 0.34534140
+Iteration 35, loss = 0.34522349
+Iteration 36, loss = 0.34569942
+Iteration 37, loss = 0.34190500
+Iteration 38, loss = 0.34232914
+Iteration 39, loss = 0.34186612
+Iteration 40, loss = 0.34238329
+Iteration 41, loss = 0.34107365
+Iteration 42, loss = 0.34045166
+Iteration 43, loss = 0.33945245
+Iteration 44, loss = 0.33770572
+Iteration 45, loss = 0.33759870
+Iteration 46, loss = 0.33866082
+Iteration 47, loss = 0.33639843
+Iteration 48, loss = 0.33656754
+Iteration 49, loss = 0.33503000
+Iteration 50, loss = 0.33456331
+Iteration 51, loss = 0.33495183
+Iteration 52, loss = 0.33517381
+Iteration 53, loss = 0.33562437
+Iteration 54, loss = 0.33396500
+Iteration 55, loss = 0.33366500
+Iteration 56, loss = 0.33271060
+Iteration 57, loss = 0.33238759
+Iteration 58, loss = 0.33263202
+Iteration 59, loss = 0.33288825
+Iteration 60, loss = 0.33165809
+Iteration 61, loss = 0.33144685
+Iteration 62, loss = 0.33169612
+Iteration 63, loss = 0.33183952
+Iteration 64, loss = 0.33147268
+Iteration 65, loss = 0.32978891
+Iteration 66, loss = 0.33034085
+Iteration 67, loss = 0.32993692
+Iteration 68, loss = 0.32873004
+Iteration 69, loss = 0.33096933
+Iteration 70, loss = 0.32907251
+Iteration 71, loss = 0.32944315
+Iteration 72, loss = 0.32781784
+Iteration 73, loss = 0.32861393
+Iteration 74, loss = 0.32865191
+Iteration 75, loss = 0.32770644
+Iteration 76, loss = 0.32749621
+Iteration 77, loss = 0.32734876
+Iteration 78, loss = 0.32922961
+Iteration 79, loss = 0.32668288
+Iteration 80, loss = 0.32635424
+Iteration 81, loss = 0.32697785
+Iteration 82, loss = 0.32624837
+Iteration 83, loss = 0.32928351
+Iteration 84, loss = 0.32625466
+Iteration 85, loss = 0.32720122
+Iteration 86, loss = 0.32691019
+Iteration 87, loss = 0.32571831
+Iteration 88, loss = 0.32512016
+Iteration 89, loss = 0.32538372
+Iteration 90, loss = 0.32502356
+Iteration 91, loss = 0.32753434
+Iteration 92, loss = 0.32629696
+Iteration 93, loss = 0.32583454
+Iteration 94, loss = 0.32585869
+Iteration 95, loss = 0.32479820
+Iteration 96, loss = 0.32483453
+Iteration 97, loss = 0.32476219
+Iteration 98, loss = 0.32440493
+Iteration 99, loss = 0.32462907
+Iteration 100, loss = 0.32364251
+Iteration 101, loss = 0.32448158
+Iteration 102, loss = 0.32403041
+Iteration 103, loss = 0.32348718
+Iteration 104, loss = 0.32438695
+Iteration 105, loss = 0.32412101
+Iteration 106, loss = 0.32327665
+Iteration 107, loss = 0.32331820
+Iteration 108, loss = 0.32353047
+Iteration 109, loss = 0.32358812
+Iteration 110, loss = 0.32289271
+Iteration 111, loss = 0.32338408
+Iteration 112, loss = 0.32356055
+Iteration 113, loss = 0.32328994
+Iteration 114, loss = 0.32206874
+Iteration 115, loss = 0.32263839
+Iteration 116, loss = 0.32278676
+Iteration 117, loss = 0.32077899
+Iteration 118, loss = 0.32253910
+Iteration 119, loss = 0.32227560
+Iteration 120, loss = 0.32069222
+Iteration 121, loss = 0.32164992
+Iteration 122, loss = 0.32312242
+Iteration 123, loss = 0.32136139
+Iteration 124, loss = 0.32224289
+Iteration 125, loss = 0.32171302
+Iteration 126, loss = 0.32062946
+Iteration 127, loss = 0.32299894
+Iteration 128, loss = 0.32122330
+Training loss did not improve more than tol=0.000100 for 10 consecutive epochs. Stopping.
+Training time took 315.41609954833984 seconds
+
+Trained a model using MLPClassifier(activation='relu', alpha=0.1, batch_size='auto', beta_1=0.9,
+              beta_2=0.999, early_stopping=False, epsilon=1e-08,
+              hidden_layer_sizes=(120, 120, 120), learning_rate='adaptive',
+              learning_rate_init=0.001, max_iter=200, momentum=0.9,
+              n_iter_no_change=10, nesterovs_momentum=True, power_t=0.5,
+              random_state=123, shuffle=True, solver='adam', tol=0.0001,
+              validation_fraction=0.1, verbose=True, warm_start=False)
+Train FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |   2196    |    48     |    743    |    691    |
+-------------------------------------------------------------
+| disagree  |    173    |    256    |    196    |    215    |
+-------------------------------------------------------------
+|  discuss  |    246    |    36     |   7334    |   1293    |
+-------------------------------------------------------------
+| unrelated |    188    |    34     |    949    |   35374   |
+-------------------------------------------------------------
+Score: 18990.0 out of 22563.25	(84.16340731056032%)
+Train F1 Score: 0.7157381531523547
+Train Accuracy Score: 0.9037060754022253
+
+Test FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |    301    |     7     |    702    |    893    |
+-------------------------------------------------------------
+| disagree  |    137    |     0     |    243    |    317    |
+-------------------------------------------------------------
+|  discuss  |    892    |    92     |   1676    |   1804    |
+-------------------------------------------------------------
+| unrelated |    507    |    108    |    975    |   16759   |
+-------------------------------------------------------------
+Score: 6685.0 out of 11651.25	(57.37581804527411%)
+Test F1 Score: 0.3640183252954599
+Test Accuracy Score: 0.7372604572462913

@@ -1,12 +1,11 @@
-from keras.layers import Dense, Dropout, Activation
+from keras.layers import Dense, Dropout, Activation, Conv1D, Flatten
 from keras.models import Sequential
 import numpy as np
 import config
 import fnc_challenge_utils.scoring as scoring
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.preprocessing import StandardScaler
-
-import keras.backend as K
+from keras.regularizers import l2
 
 
 def keras_nnet(train_X, train_Y, test_X, test_Y):
@@ -14,7 +13,9 @@ def keras_nnet(train_X, train_Y, test_X, test_Y):
     test_X = StandardScaler().fit_transform(test_X)
     num_classes = 4
     model = Sequential()
-    model.add(Dense(units=512, input_dim=train_X.shape[1]))
+    #model.add(Dense(units=100, input_dim=train_X.shape[1], kernel_regularizer=l2(0.01)))
+    model.add(Conv1D(filters=5, kernel_size=2,  activation='relu', input_dim=num_classes))
+    #model.add(Flatten())
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
     model.add(Dense(units=num_classes, activation='softmax'))

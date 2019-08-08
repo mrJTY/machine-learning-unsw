@@ -1,9 +1,0 @@
-Namespace(model='gbm', skip_preprocess=False, train_prop='1.00')
-Reading data..
-Original data sizes
-1683
-
-Train shape : (49972, 4)
-Test shape : (25413, 4)
-
-Fitting a tfidf vectorizer..
