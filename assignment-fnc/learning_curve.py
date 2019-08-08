@@ -4,10 +4,9 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.datasets import load_digits
 from sklearn.model_selection import learning_curve
-from sklearn.model_selection import ShuffleSplit
 
 # Source: https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html
-def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
+def plot_learning_curve(estimator, model_name, X, y, ylim=None, cv=None,
                         n_jobs=None, train_sizes=np.linspace(.1, 1.0, 5)):
     """
     Generate a simple plot of the test and training learning curve.
@@ -63,7 +62,7 @@ def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
         (default: np.linspace(0.1, 1.0, 5))
     """
     plt.figure()
-    plt.title(title)
+    plt.title(f"{model_name} learning curve")
     if ylim is not None:
         plt.ylim(*ylim)
     plt.xlabel("Training examples")
@@ -87,4 +86,4 @@ def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
              label="Cross-validation score")
 
     plt.legend(loc="best")
-    return plt
+    plt.savefig("img/f{model_name}_learning_curve.png")

@@ -15,9 +15,11 @@ from sklearn.svm import SVC
 from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+from learning_curve import plot_learning_curve
+from sklearn.model_selection import ShuffleSplit
 
 def xgboost_clf():
-    return XGBClassifier(n_estimators=200, reg_alpha=0.25, reg_lambda=1.25, max_depth=3, max_delta_step=10)
+    return XGBClassifier(n_estimators=200, reg_alpha=0.25, reg_lambda=1.25, max_depth=3, max_delta_step=10, random_state=123)
 
 def fit_xgboost(model, train_X, train_Y, test_X, test_Y):
     # Split out an validation set
@@ -149,4 +151,10 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     print(f"Test F1 Score: {f1_test_score}")
     acc_test_score = accuracy_score(test_Y_labels, test_pred)
     print(f"Test Accuracy Score: {acc_test_score}")
+
+    print("Plotting learning plots...")
+    cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=0)
+    plot_learning_curve(model, model_name, train_X, train_Y, ylim=(0.7, 1.01), cv=cv, n_jobs=4)
+
+
     return model
