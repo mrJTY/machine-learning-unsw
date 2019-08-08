@@ -17,3 +17,6 @@ DATASOURCES = {
         "stances": "data/competition_test_stances.csv"
     }
 }
+
+# These were found by plotting the validation scores from a simple tree
+MAX_DEPTH = 5

@@ -17,9 +17,10 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from learning_curve import plot_learning_curve
 from sklearn.model_selection import ShuffleSplit
+from validation_curve import plot_validation_curve
 
 def xgboost_clf():
-    return XGBClassifier(n_estimators=200, reg_alpha=0.25, reg_lambda=1.25, max_depth=3, max_delta_step=10, random_state=123)
+    return XGBClassifier(n_estimators=200, reg_alpha=0.25, reg_lambda=1.25, max_depth=config.MAX_DEPTH, max_delta_step=10, random_state=123)
 
 def fit_xgboost(model, train_X, train_Y, test_X, test_Y):
     # Split out an validation set
@@ -41,7 +42,7 @@ def fit_xgboost(model, train_X, train_Y, test_X, test_Y):
     return model
 
 def rf():
-    return RandomForestClassifier(random_state=123, n_estimators=200)
+    return RandomForestClassifier(random_state=123, n_estimators=200, max_depth=config.MAX_DEPTH)
 
 def adaboost():
     return AdaBoostClassifier(random_state=123, n_estimators=200)
@@ -92,7 +93,7 @@ def gbm_tune():
     Gradient boosting model
     This was the baseline of the FNC challenge
     """
-    return GradientBoostingClassifier(n_estimators=200, max_features='sqrt', max_depth=3, min_samples_leaf=25)
+    return GradientBoostingClassifier(n_estimators=200, max_features='sqrt', max_depth=config.MAX_DEPTH, min_samples_leaf=25)
 
 
 MODELS = {
@@ -118,9 +119,15 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     model = MODELS[model_name]()
     start_time = time.time()
 
-    # Xgboost has a custom fit
     if model_name == "xgboost":
+        plot_validation_curve(model, model_name, train_X, train_Y, "gamma", [0.01, 0.1, 1.0, 5.0])
+        # Xgboost has a custom fit
         fit_xgboost(model, train_X, train_Y, test_X, test_Y)
+    elif model_name == "tree":
+        # Plot some validation curves on the parameters
+        plot_validation_curve(model, model_name, train_X, train_Y, "max_depth", np.linspace(3, 10, 3))
+        plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_split", np.linspace(2, 50, 4))
+        plot_validation_curve(model, model_name, train_X, train_Y, "min_samples_leaf", np.linspace(2, 100, 4))
     else:
         model.fit(train_X, train_Y)
 
