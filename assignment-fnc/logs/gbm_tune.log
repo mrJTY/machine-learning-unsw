@@ -1,4 +1,0 @@
-Namespace(model='gbm_tune', skip_preprocess=True, train_prop=1)
-
-Training a gbm_tune model
-
