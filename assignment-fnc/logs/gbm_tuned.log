@@ -1,14 +1,14 @@
-Namespace(model='gbm', skip_preprocess=True, train_prop=1)
+Namespace(model='gbm_tuned', skip_preprocess=True, train_prop=1)
 
-Training a gbm model
+Training a gbm_tuned model
 
-Training time took 233.24963235855103 seconds
+Training time took 81.18971562385559 seconds
 
 Trained a model using GradientBoostingClassifier(criterion='friedman_mse', init=None,
                            learning_rate=0.1, loss='deviance', max_depth=3,
-                           max_features=None, max_leaf_nodes=None,
+                           max_features='sqrt', max_leaf_nodes=None,
                            min_impurity_decrease=0.0, min_impurity_split=None,
-                           min_samples_leaf=1, min_samples_split=2,
+                           min_samples_leaf=50, min_samples_split=2,
                            min_weight_fraction_leaf=0.0, n_estimators=200,
                            n_iter_no_change=None, presort='auto',
                            random_state=123, subsample=1.0, tol=0.0001,
@@ -18,31 +18,31 @@ Train FNC Score:
 -------------------------------------------------------------
 |           |   agree   | disagree  |  discuss  | unrelated |
 -------------------------------------------------------------
-|   agree   |   1906    |    101    |    805    |    866    |
+|   agree   |   1864    |    119    |    792    |    903    |
 -------------------------------------------------------------
-| disagree  |    132    |    321    |    165    |    222    |
+| disagree  |    136    |    292    |    175    |    237    |
 -------------------------------------------------------------
-|  discuss  |    291    |    47     |   6965    |   1606    |
+|  discuss  |    339    |    40     |   6753    |   1777    |
 -------------------------------------------------------------
-| unrelated |    208    |    40     |   1009    |   35288   |
+| unrelated |    244    |    36     |    972    |   35293   |
 -------------------------------------------------------------
-Score: 18399.25 out of 22563.25	(81.54521179351379%)
-Train F1 Score: 0.70412738590683
-Train Accuracy Score: 0.8900984551348755
+Score: 18132.5 out of 22563.25	(80.36297962394602%)
+Train F1 Score: 0.6867740972182328
+Train Accuracy Score: 0.8845353397902825
 
 Test FNC Score:
 -------------------------------------------------------------
 |           |   agree   | disagree  |  discuss  | unrelated |
 -------------------------------------------------------------
-|   agree   |    149    |    28     |   1137    |    589    |
+|   agree   |    143    |     0     |   1056    |    704    |
 -------------------------------------------------------------
-| disagree  |    25     |     2     |    338    |    332    |
+| disagree  |    30     |     0     |    251    |    416    |
 -------------------------------------------------------------
-|  discuss  |    551    |    56     |   2638    |   1219    |
+|  discuss  |    294    |     0     |   2666    |   1504    |
 -------------------------------------------------------------
-| unrelated |    200    |    259    |   1006    |   16884   |
+| unrelated |    91     |     0     |    724    |   17534   |
 -------------------------------------------------------------
-Score: 7543.75 out of 11651.25	(64.74627185924257%)
-Test F1 Score: 0.39082796595991154
-Test Accuracy Score: 0.7741313500964073
+Score: 7600.25 out of 11651.25	(65.23119836927368%)
+Test F1 Score: 0.4022342533373756
+Test Accuracy Score: 0.8004958092314957
 Plotting learning plots...

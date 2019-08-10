@@ -1,6 +1,6 @@
-Namespace(model='xgboost', skip_preprocess=True, train_prop=1)
+Namespace(model='xgboost_tuned', skip_preprocess=True, train_prop=1)
 
-Training a xgboost model
+Training a xgboost_tuned model
 
 [0]	validation_0-mlogloss:1.26288	validation_1-mlogloss:1.26919
 Multiple eval metrics have been passed: 'validation_1-mlogloss' will be used for early stopping.
@@ -57,7 +57,7 @@ Will train until validation_1-mlogloss hasn't improved in 5 rounds.
 Stopping. Best iteration:
 [43]	validation_0-mlogloss:0.445022	validation_1-mlogloss:0.569668
 
-Training time took 33.44010400772095 seconds
+Training time took 228.51996970176697 seconds
 
 Trained a model using XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
               colsample_bynode=1, colsample_bytree=1, gamma=0,

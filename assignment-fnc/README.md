@@ -2,12 +2,16 @@
 
 Author: z5232245 Justin Ty
 
+My attempt at the Fake News Challenge(FNC) as a project for COMP9417.
+
 Original utility functions and data were sourced from:
 https://github.com/FakeNewsChallenge/fnc-1-baseline
 
 # Installation
 
 Use `make install` or `pip install -r requirements` to install the required packages.
+
+Use Python3, recommended to run in a conda environment.
 
 # Help
 
@@ -27,17 +31,31 @@ optional arguments:
                         Between 0 and 1
 ```
 
-# Models
-
-Choose the models from `modelling.py`
-
-# Example
-
-Train a the baseline model using only 25% of training set
+For example to train a the baseline model using only 25% of training set:
 
 ```
 $ python main.py --train_prop 0.25 --model gbm > logs/gbm_0.25.log
 ```
+
+
+# Wrapper scripts
+
+There are wrapper scripts in `sbin/` that help with setting things up:
+
+1) `sbin/1-download-datasets.sh` - Downloads the article csv's from the FNC challenge
+2) `sbin/2-preprocess.sh` - Generate train / test matrices and save then as pickle files in `data/` folder
+3) `sbin/3-train-and-test-models.sh` - Train models and get test results
+
+# Preprocessing
+
+See `preprocessing.py` to generate train / test matrices and save then as pickle files in the `data/` folder.
+
+Some feature engineering utility functions were borrowed from:
+https://github.com/FakeNewsChallenge/fnc-1-baseline
+
+# Models
+
+Choose and tune the models in `modelling.py`
 
 # Logs
 
