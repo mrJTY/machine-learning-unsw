@@ -1,0 +1,4 @@
+Namespace(model='nb', skip_preprocess=True, train_prop=1)
+
+Training a nb model
+

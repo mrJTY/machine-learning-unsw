@@ -15,9 +15,7 @@ from sklearn.svm import SVC
 from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-from learning_curve import plot_learning_curve
-from sklearn.model_selection import ShuffleSplit
-from validation_curve import plot_validation_curve
+from learning_curve import plot_learning_curv
 
 def simple_decision_tree():
     """
@@ -30,8 +28,11 @@ def simple_decision_tree():
 def rf():
     return RandomForestClassifier(random_state=config.RANDOM_STATE, n_estimators=200, max_depth=config.TREE_MAX_DEPTH, min_samples_leaf=config.TREE_MIN_SAMPLES_LEAF)
 
-def xgboost_clf():
-    return XGBClassifier(n_estimators=200, reg_alpha=0.25, reg_lambda=1.25, max_depth=config.MAX_DEPTH, max_delta_step=10, random_state=config.RANDOM_STATE)
+def xgboost_plain():
+    return XGBClassifier(n_estimators=200)
+
+def xgboost_tuned():
+    return XGBClassifier(n_estimators=200, reg_alpha=0.25, reg_lambda=1.25, max_depth=config.TREE_MAX_DEPTH, max_delta_step=10, random_state=config.RANDOM_STATE)
 
 def fit_xgboost(model, train_X, train_Y, test_X, test_Y):
     # Split out an validation set
@@ -75,9 +76,7 @@ def gbm_tune():
     Gradient boosting model
     This was the baseline of the FNC challenge
     """
-    return GradientBoostingClassifier(n_estimators=200, max_features='sqrt', max_depth=config.MAX_DEPTH, min_samples_leaf=config.TREE_MIN_SAMPLES_LEAF)
-
-
+    return GradientBoostingClassifier(n_estimators=200, max_features='sqrt', max_depth=config.TREE_MAX_DEPTH, min_samples_leaf=config.TREE_MIN_SAMPLES_LEAF)
 
 MODELS = {
     'tree': simple_decision_tree,
@@ -87,7 +86,8 @@ MODELS = {
     'nb': nb,
     'adaboost': adaboost,
     'rf': rf,
-    'xgboost': xgboost_clf
+    'xgboost_plain': xgboost_plain,
+    'xgboost_tuned': xgboost_tuned
 }
 
 def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
@@ -97,13 +97,22 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     print("")
     print(f"Training a {model_name} model")
     print("")
-    model = MODELS[model_name]()
     start_time = time.time()
+    model = MODELS[model_name]()
 
-    if model_name == "xgboost":
+    if model_name == "xgboost_plain" or model_name == "xgboost_tuned":
         # Xgboost has a custom fit
         model = fit_xgboost(model, train_X, train_Y, test_X, test_Y)
-        plot_validation_curve(model, model_name, train_X, train_Y, "gamma", [0.01, 0.1, 1.0, 5.0])
+        # Plot some validation plots on the plain xgboost
+        if model_name == "xgboost_plain":
+            # Tips on fine tuning xgboost: https://towardsdatascience.com/fine-tuning-xgboost-in-python-like-a-boss-b4543ed8b1e
+            # Regularisation params
+            plot_validation_curve(model, model_name, train_X, train_Y, "reg_alpha", np.linspace(0.01, 0.9, 4))
+            plot_validation_curve(model, model_name, train_X, train_Y, "gamma", [0, 1, 5])
+            # % of rows used
+            plot_validation_curve(model, model_name, train_X, train_Y, "subsample", np.linspace(0.5, 1.0, 4))
+            # % of columns used
+            plot_validation_curve(model, model_name, train_X, train_Y, "colsample_bytree", np.linspace(0.3, 1.0, 4))
     elif model_name == "tree":
         # Plot some validation curves on the parameters
         model.fit(train_X, train_Y)
