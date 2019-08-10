@@ -1,5 +1,4 @@
-conda activate fnc
-# Save as pickles
+# Preprocess the data and save as pickles in the data/ folder
 python main.py --train_prop 0.25
 python main.py --train_prop 0.50
 python main.py --train_prop 0.75

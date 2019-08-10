@@ -1,6 +1,5 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import feature_extraction
 import scipy.sparse as sp
 import pickle
 import re

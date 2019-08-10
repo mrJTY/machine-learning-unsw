@@ -19,8 +19,19 @@ from learning_curve import plot_learning_curve
 from sklearn.model_selection import ShuffleSplit
 from validation_curve import plot_validation_curve
 
+def simple_decision_tree():
+    """
+    Simple tree with default parameters
+    Expect to have the lowest score
+    Use this to do validation curves
+    """
+    return DecisionTreeClassifier()
+
+def rf():
+    return RandomForestClassifier(random_state=config.RANDOM_STATE, n_estimators=200, max_depth=config.TREE_MAX_DEPTH, min_samples_leaf=config.TREE_MIN_SAMPLES_LEAF)
+
 def xgboost_clf():
-    return XGBClassifier(n_estimators=200, reg_alpha=0.25, reg_lambda=1.25, max_depth=config.MAX_DEPTH, max_delta_step=10, random_state=123)
+    return XGBClassifier(n_estimators=200, reg_alpha=0.25, reg_lambda=1.25, max_depth=config.MAX_DEPTH, max_delta_step=10, random_state=config.RANDOM_STATE)
 
 def fit_xgboost(model, train_X, train_Y, test_X, test_Y):
     # Split out an validation set
@@ -41,45 +52,16 @@ def fit_xgboost(model, train_X, train_Y, test_X, test_Y):
     plt.savefig("img/xgboost_logloss.png")
     return model
 
-def rf():
-    return RandomForestClassifier(random_state=123, n_estimators=200, max_depth=config.MAX_DEPTH)
-
 def adaboost():
-    return AdaBoostClassifier(random_state=123, n_estimators=200)
+    return AdaBoostClassifier(random_state=config.RANDOM_STATE, n_estimators=200)
 
 def nb():
     return MultinomialNB()
 
-def svc():
-    return SVC()
-
-
 def nnet():
-    clf= MLPClassifier(solver='adam', hidden_layer_sizes=(120, 120, 120), random_state=123, activation='relu', learning_rate='adaptive', learning_rate_init=0.001, alpha=0.1, verbose=True)
+    clf= MLPClassifier(solver='adam', hidden_layer_sizes=(120, 120, 120), random_state=config.RANDOM_STATE, activation='relu', learning_rate='adaptive', learning_rate_init=0.001, alpha=0.1, verbose=True)
     clf.out_activation_ = 'softmax'
     return clf
-
-def simple_decision_tree():
-    """
-    Simple tree with default parameters
-    Expect to have the lowest score
-    """
-    return DecisionTreeClassifier()
-
-def random_cv_tree():
-    """
-    Use a randomised cross validation search to find the
-    best parameters for a Decision Tree
-    """
-    n_iter_search = 10
-    clf = DecisionTreeClassifier(random_state=123)
-    param_distributions = {
-        'min_samples_leaf': [2, 10, 50, 100],
-        'max_depth': [3, 5, 10],
-        'min_samples_split': [3, 5, 10],
-        'max_features': ["sqrt"]
-    }
-    return RandomizedSearchCV(clf, n_iter=n_iter_search, cv=3, iid=False, param_distributions=param_distributions)
 
 def gbm():
     """
@@ -93,19 +75,18 @@ def gbm_tune():
     Gradient boosting model
     This was the baseline of the FNC challenge
     """
-    return GradientBoostingClassifier(n_estimators=200, max_features='sqrt', max_depth=config.MAX_DEPTH, min_samples_leaf=25)
+    return GradientBoostingClassifier(n_estimators=200, max_features='sqrt', max_depth=config.MAX_DEPTH, min_samples_leaf=config.TREE_MIN_SAMPLES_LEAF)
+
 
 
 MODELS = {
     'tree': simple_decision_tree,
-    'random_tree': random_cv_tree,
     'gbm': gbm,
     'gbm_tune': gbm_tune,
     'nnet': nnet,
     'nb': nb,
     'adaboost': adaboost,
     'rf': rf,
-    'svc': svc,
     'xgboost': xgboost_clf
 }
 
@@ -121,7 +102,7 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
 
     if model_name == "xgboost":
         # Xgboost has a custom fit
-        fit_xgboost(model, train_X, train_Y, test_X, test_Y)
+        model = fit_xgboost(model, train_X, train_Y, test_X, test_Y)
         plot_validation_curve(model, model_name, train_X, train_Y, "gamma", [0.01, 0.1, 1.0, 5.0])
     elif model_name == "tree":
         # Plot some validation curves on the parameters
@@ -163,6 +144,5 @@ def train_sklearn_model(model_name, train_X, train_Y, test_X, test_Y):
     print("Plotting learning plots...")
     cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=0)
     plot_learning_curve(model, model_name, train_X, train_Y, ylim=(0.7, 1.01), cv=cv, n_jobs=4)
-
 
     return model

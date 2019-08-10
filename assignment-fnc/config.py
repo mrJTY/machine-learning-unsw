@@ -18,5 +18,8 @@ DATASOURCES = {
     }
 }
 
+RANDOM_STATE = 123
+
 # These were found by plotting the validation scores from a simple tree
-MAX_DEPTH = 5
+TREE_MAX_DEPTH = 3
+TREE_MIN_SAMPLES_LEAF = 50
