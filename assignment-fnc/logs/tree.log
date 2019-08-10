@@ -2,4 +2,43 @@ Namespace(model='tree', skip_preprocess=True, train_prop=1)
 
 Training a tree model
 
-Training time took 4.2445220947265625 seconds
+Training time took 8.097009658813477 seconds
+
+Trained a model using DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+                       max_features=None, max_leaf_nodes=None,
+                       min_impurity_decrease=0.0, min_impurity_split=None,
+                       min_samples_leaf=1, min_samples_split=2,
+                       min_weight_fraction_leaf=0.0, presort=False,
+                       random_state=123, splitter='best')
+Train FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |   3641    |     2     |    25     |    10     |
+-------------------------------------------------------------
+| disagree  |    24     |    808    |     1     |     7     |
+-------------------------------------------------------------
+|  discuss  |    128    |    40     |   8695    |    46     |
+-------------------------------------------------------------
+| unrelated |    43     |    11     |    134    |   36357   |
+-------------------------------------------------------------
+Score: 22288.25 out of 22563.25	(98.7812039488992%)
+Train F1 Score: 0.9736649683970103
+Train Accuracy Score: 0.9905747218442328
+
+Test FNC Score:
+-------------------------------------------------------------
+|           |   agree   | disagree  |  discuss  | unrelated |
+-------------------------------------------------------------
+|   agree   |    338    |    120    |    887    |    558    |
+-------------------------------------------------------------
+| disagree  |    86     |    29     |    276    |    306    |
+-------------------------------------------------------------
+|  discuss  |    884    |    240    |   2108    |   1232    |
+-------------------------------------------------------------
+| unrelated |   1732    |    372    |   4095    |   12150   |
+-------------------------------------------------------------
+Score: 6135.75 out of 11651.25	(52.66173157386547%)
+Test F1 Score: 0.3196086923590184
+Test Accuracy Score: 0.5754928579860701
+Plotting learning plots...

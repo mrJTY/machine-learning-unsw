@@ -4,7 +4,6 @@ from sklearn.model_selection import RandomizedSearchCV
 import numpy as np
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.naive_bayes import MultinomialNB
 import config
 import fnc_challenge_utils.scoring as scoring
 from sklearn.ensemble import AdaBoostClassifier
@@ -16,6 +15,7 @@ from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from learning_curve import plot_learning_curve
+from validation_curve import plot_validation_curve
 from sklearn.model_selection import ShuffleSplit
 
 def simple_decision_tree():
@@ -71,8 +71,6 @@ def fit_xgboost(model, train_X, train_Y, test_X, test_Y):
 def adaboost():
     return AdaBoostClassifier(random_state=config.RANDOM_STATE, n_estimators=200)
 
-def nb():
-    return MultinomialNB()
 
 def nnet():
     clf= MLPClassifier(solver='adam', hidden_layer_sizes=(120, 120, 120), random_state=config.RANDOM_STATE, activation='relu', learning_rate='adaptive', learning_rate_init=0.001, alpha=0.1, verbose=True)
@@ -84,7 +82,6 @@ MODELS = {
     'gbm': gbm,
     'gbm_tuned': gbm_tuned,
     'nnet': nnet,
-    'nb': nb,
     'adaboost': adaboost,
     'rf': rf,
     'xgboost_plain': xgboost_plain,

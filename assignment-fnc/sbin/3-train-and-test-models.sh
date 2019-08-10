@@ -1,6 +1,5 @@
 # Record the scores of the different models
 rm logs/*
-python main.py --skip_preprocess --model nb > logs/nb.log
 python main.py --skip_preprocess --model tree > logs/tree.log
 python main.py --skip_preprocess --model gbm > logs/gbm.log
 python main.py --skip_preprocess --model gbm_tuned > logs/gbm_tuned.log
