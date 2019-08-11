@@ -1,5 +1,5 @@
 install:
-	conda create --name fnc python=3.6 && \
+	conda create --name fnc python=3.6 -y && \
 	pip install -r requirements.txt
 
 copy:
