@@ -1,6 +1,8 @@
+SHELL = /bin/bash
+
 install:
 	conda create --name fnc python=3.6 -y && \
-	pip install -r requirements.txt
+	source activate fnc && pip install -r requirements.txt
 
 copy:
 	cp ~/Downloads/Learning\ to\ predict\ the\ stace\ of\ news\ articles.pdf report.pdf
